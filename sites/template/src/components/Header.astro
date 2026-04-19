@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 
 const navItems = [
   { href: '/', label: '首页' },
@@ -52,6 +53,7 @@ const currentPath = Astro.url.pathname;
         </svg>
       </a>
       <ThemeToggle />
+      <LanguageSwitcher />
     </div>
   </nav>
 </header>
