@@ -17,6 +17,19 @@ const { currentSlug, category, tags, maxCount = 4 } = Astro.props;
 const allPosts = await getCollection('blog');
 const currentTagSet = new Set(tags || []);
 
+const siteConfig = config as any;
+const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+
+const labels = {
+  'zh-CN': { title: '📚 相关推荐' },
+  'en-US': { title: '📚 Related Posts' }
+};
+
+const t = labels[lang] || labels['zh-CN'];
+
+// Locale-aware date format
+const dateLocale = lang === 'zh-CN' ? 'zh-CN' : 'en-US';
+
 // Score posts by relevance
 const scored = allPosts
   .filter(p => p.slug !== currentSlug)
@@ -43,7 +56,7 @@ const relatedPosts = scored.map(x => x.post);
 
 {internalLinksEnabled && relatedPosts.length > 0 && (
   <section class="internal-links">
-    <h2 class="section-title">📚 相关推荐</h2>
+    <h2 class="section-title">{t.title}</h2>
     <div class="related-grid">
       {relatedPosts.map(post => (
         <a href={`/blog/${post.slug}`} class="related-item">
@@ -51,7 +64,7 @@ const relatedPosts = scored.map(x => x.post);
           <span class="related-title">{post.data.title}</span>
           <span class="related-meta">
             <span class="related-date">
-              {new Date(post.data.publishDate).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
+              {new Date(post.data.publishDate).toLocaleDateString(dateLocale, { month: 'short', day: 'numeric' })}
             </span>
             {post.data.readingTime && (
               <span class="related-time">{post.data.readingTime}</span>

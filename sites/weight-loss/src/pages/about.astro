@@ -1,81 +1,131 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import EmailSubscribe from '../components/EmailSubscribe.astro';
+import config from '../config';
+
+const siteConfig = config as any;
+const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+const { name } = siteConfig.site || { name: 'FastWeightLoss' };
+
+const labels = {
+  'zh-CN': {
+    title: '关于站长 | 变现学堂',
+    description: '了解变现学堂站长的背景和故事',
+    pageTitle: '关于站长',
+    section1Title: '我是谁',
+    section1P1: '你好！我是变现学堂的站长，一个在互联网行业摸爬滚打8年的老兵。从最初的程序员，到现在的全栈独立开发者，我一直在探索用技术赚钱的方法。',
+    section1P2: '现在我生活在法国，同时经营着自己的互联网业务。这个博客就是我分享赚钱经验、副业心得和海外创业故事的地方。',
+    section2Title: '这个博客',
+    section2Intro: '变现学堂成立于2022年，专注于分享：',
+    section2Li1: '<strong>AI变现</strong> - 如何用ChatGPT等AI工具实现副业增收',
+    section2Li2: '<strong>副业赚钱</strong> - 适合普通人的副业方向和实操方法',
+    section2Li3: '<strong>法国创业</strong> - 在法国创业、生活的第一手经验',
+    section2Li4: '<strong>干货分享</strong> - 效率工具、赚钱方法、思维提升',
+    section3Title: '我的经历',
+    section3Year2016: '国内互联网公司程序员',
+    section3Year2019: '转行产品经理，开始探索副业',
+    section3Year2021: '副业收入超过主业，开始独立创业',
+    section3Year2022: '创办变现学堂，分享赚钱经验',
+    section3Year2023: '移居法国，开始国际化业务探索',
+    section4Title: '联系我',
+    section4Intro: '如果你有任何问题、合作建议，或者只是想交个朋友，可以联系我：',
+    contactEmail: 'Email：contact@example.com',
+    contactWechat: '微信公众号：变现学堂',
+    contactZhihu: '知乎：变现学堂'
+  },
+  'en-US': {
+    title: 'About | FastWeightLoss',
+    description: 'Learn about the站长 and the story behind FastWeightLoss',
+    pageTitle: 'About Me',
+    section1Title: 'Who I Am',
+    section1P1: `Hi! I'm the founder of ${name}, a veteran with 8 years in the internet industry. From a programmer to a full-stack independent developer, I've always been exploring ways to make money with technology.`,
+    section1P2: `Now I live in France while running my online business. This blog is where I share my experiences in making money, side hustles, and overseas entrepreneurship stories.`,
+    section2Title: 'This Blog',
+    section2Intro: `${name} was founded in 2022, focusing on sharing:`,
+    section2Li1: '<strong>AI Income</strong> - How to use ChatGPT and AI tools for side income',
+    section2Li2: '<strong>Side Hustles</strong> - Practical methods for ordinary people',
+    section2Li3: '<strong>Business in France</strong> - First-hand experience of doing business in France',
+    section2Li4: '<strong>valuable Tips</strong> - Productivity tools, money-making methods, mindset growth',
+    section3Title: 'My Journey',
+    section3Year2016: 'Programmer at a Chinese internet company',
+    section3Year2019: 'Transitioned to product manager, started exploring side hustles',
+    section3Year2021: 'Side income exceeded main job income, started independent entrepreneurship',
+    section3Year2022: `Founded ${name}, sharing money-making experiences`,
+    section3Year2023: 'Moved to France, started exploring international business',
+    section4Title: 'Contact Me',
+    section4Intro: 'If you have any questions, partnership suggestions, or just want to make friends, feel free to contact me:',
+    contactEmail: 'Email: contact@example.com',
+    contactWechat: 'WeChat: FastWeightLoss',
+    contactZhihu: 'Zhihu: FastWeightLoss'
+  }
+};
+
+const t = labels[lang] || labels['zh-CN'];
 ---
 
 <BaseLayout
-  title="关于站长 | 变现学堂"
-  description="了解变现学堂站长的背景和故事"
+  title={t.title}
+  description={t.description}
 >
   <div class="about-page">
     <header class="page-header">
       <div class="container">
-        <h1 class="page-title">关于站长</h1>
+        <h1 class="page-title">{t.pageTitle}</h1>
       </div>
     </header>
 
     <div class="container">
       <div class="about-content">
         <section class="about-section">
-          <h2>我是谁</h2>
-          <p>
-            你好！我是变现学堂的站长，一个在互联网行业摸爬滚打8年的老兵。
-            从最初的程序员，到现在的全栈独立开发者，我一直在探索用技术赚钱的方法。
-          </p>
-          <p>
-            现在我生活在法国，同时经营着自己的互联网业务。
-            这个博客就是我分享赚钱经验、副业心得和海外创业故事的地方。
-          </p>
+          <h2>{t.section1Title}</h2>
+          <p set:html={t.section1P1} />
+          <p set:html={t.section1P2} />
         </section>
 
         <section class="about-section">
-          <h2>这个博客</h2>
-          <p>
-            变现学堂成立于2022年，专注于分享：
-          </p>
+          <h2>{t.section2Title}</h2>
+          <p>{t.section2Intro}</p>
           <ul>
-            <li><strong>AI变现</strong> - 如何用ChatGPT等AI工具实现副业增收</li>
-            <li><strong>副业赚钱</strong> - 适合普通人的副业方向和实操方法</li>
-            <li><strong>法国创业</strong> - 在法国创业、生活的第一手经验</li>
-            <li><strong>干货分享</strong> - 效率工具、赚钱方法、思维提升</li>
+            <li set:html={t.section2Li1} />
+            <li set:html={t.section2Li2} />
+            <li set:html={t.section2Li3} />
+            <li set:html={t.section2Li4} />
           </ul>
         </section>
 
         <section class="about-section">
-          <h2>我的经历</h2>
+          <h2>{t.section3Title}</h2>
           <div class="timeline">
             <div class="timeline-item">
               <span class="timeline-year">2016</span>
-              <p>国内互联网公司程序员</p>
+              <p>{t.section3Year2016}</p>
             </div>
             <div class="timeline-item">
               <span class="timeline-year">2019</span>
-              <p>转行产品经理，开始探索副业</p>
+              <p>{t.section3Year2019}</p>
             </div>
             <div class="timeline-item">
               <span class="timeline-year">2021</span>
-              <p>副业收入超过主业，开始独立创业</p>
+              <p>{t.section3Year2021}</p>
             </div>
             <div class="timeline-item">
               <span class="timeline-year">2022</span>
-              <p>创办变现学堂，分享赚钱经验</p>
+              <p>{t.section3Year2022}</p>
             </div>
             <div class="timeline-item">
               <span class="timeline-year">2023</span>
-              <p>移居法国，开始国际化业务探索</p>
+              <p>{t.section3Year2023}</p>
             </div>
           </div>
         </section>
 
         <section class="about-section">
-          <h2>联系我</h2>
-          <p>
-            如果你有任何问题、合作建议，或者只是想交个朋友，可以联系我：
-          </p>
+          <h2>{t.section4Title}</h2>
+          <p>{t.section4Intro}</p>
           <ul class="contact-list">
-            <li>Email：contact@example.com</li>
-            <li>微信公众号：变现学堂</li>
-            <li>知乎：变现学堂</li>
+            <li>{t.contactEmail}</li>
+            <li>{t.contactWechat}</li>
+            <li>{t.contactZhihu}</li>
           </ul>
         </section>
 

@@ -1,16 +1,54 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import config from '../config';
+
+const siteConfig = config as any;
+const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+
+const labels = {
+  'zh-CN': {
+    title: '搜索 | 变现学堂',
+    metaDesc: '搜索博客文章，探索AI变现、副业、法国创业等实用干货。',
+    pageTitle: '搜索文章',
+    pageDesc: '输入关键词找到你感兴趣的内容',
+    placeholder: '搜索文章...',
+    emptyHint: '输入关键词搜索文章',
+    loading: '加载中...',
+    loadingFailed: '加载失败',
+    searching: '搜索中...',
+    dataLoading: '数据加载中...',
+    noResults: '没有找到',
+    resultCount: '找到 {count} 个结果'
+  },
+  'en-US': {
+    title: 'Search | FastWeightLoss',
+    metaDesc: 'Search articles about intermittent fasting, keto diet, and healthy weight loss.',
+    pageTitle: 'Search Articles',
+    pageDesc: 'Enter keywords to find content you are interested in',
+    placeholder: 'Search articles...',
+    emptyHint: 'Enter keywords to search',
+    loading: 'Loading...',
+    loadingFailed: 'Failed to load',
+    searching: 'Searching...',
+    dataLoading: 'Loading data...',
+    noResults: 'No results found for',
+    resultCount: 'Found {count} result'
+  }
+};
+
+const t = labels[lang] || labels['en-US'];
+const dateLocale = lang === 'zh-CN' ? 'zh-CN' : 'en-US';
 ---
 
 <BaseLayout
-  title="搜索 | 变现学堂"
-  description="搜索博客文章，探索AI变现、副业、法国创业等实用干货。"
+  title={t.title}
+  description={t.metaDesc}
 >
   <div class="search-page">
     <div class="container">
       <header class="page-header">
-        <h1 class="page-title">搜索文章</h1>
-        <p class="page-desc">输入关键词找到你感兴趣的内容</p>
+        <h1 class="page-title">{t.pageTitle}</h1>
+        <p class="page-desc">{t.pageDesc}</p>
       </header>
 
       <div class="search-wrapper">
@@ -23,7 +61,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             type="search"
             id="search-input"
             class="search-input"
-            placeholder="搜索文章..."
+            placeholder={t.placeholder}
             autocomplete="off"
             autofocus
           />
@@ -33,15 +71,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div id="results" class="results-list"></div>
       <div id="empty-state" class="empty-state">
-        <p>输入关键词搜索文章</p>
+        <p>{t.emptyHint}</p>
       </div>
     </div>
   </div>
 </BaseLayout>
 
-<script>
+<script define:vars={{ t, dateLocale }}>
   // Simple fuzzy search - no external dependencies
-  function fuzzySearch(data: any[], query: string) {
+  function fuzzySearch(data, query) {
     const q = query.toLowerCase().trim();
     if (!q) return [];
 
@@ -69,23 +107,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         // Word-level matching for Chinese
         const qChars = q.split('');
         const titleChars = item.title.toLowerCase();
-        const matchedChars = qChars.filter((c: string) => titleChars.includes(c)).length;
+        const matchedChars = qChars.filter(c => titleChars.includes(c)).length;
         score += matchedChars * 3;
 
         return { item, score };
       })
       .filter(r => r.score > 0)
-      .sort((a: any, b: any) => b.score - a.score)
+      .sort((a, b) => b.score - a.score)
       .slice(0, 10);
   }
 
-  function escapeHtml(text: string): string {
+  function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  function highlight(text: string, query: string): string {
+  function highlight(text, query) {
     if (!query || !text) return escapeHtml(text || '');
     const escaped = escapeHtml(text);
     const q = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -93,8 +131,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     return escaped.replace(regex, '<mark>$1</mark>');
   }
 
-  function renderResult(item: any, query: string): string {
-    const date = new Date(item.publishDate).toLocaleDateString('zh-CN', {
+  function renderResult(item, query) {
+    const date = new Date(item.publishDate).toLocaleDateString(dateLocale, {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -109,7 +147,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p class="result-excerpt">${highlight(item.description, query)}</p>
         <div class="result-footer">
           <div class="result-tags">
-            ${item.tags.slice(0, 3).map((t: string) => `<span class="result-tag">${escapeHtml(t)}</span>`).join('')}
+            ${item.tags.slice(0, 3).map((t) => `<span class="result-tag">${escapeHtml(t)}</span>`).join('')}
           </div>
           <span class="result-reading-time">${item.readingTime || ''}</span>
         </div>
@@ -117,25 +155,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     `;
   }
 
-  let searchData: any[] = [];
-  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  let searchData = [];
+  let debounceTimer = null;
 
-  const input = document.getElementById('search-input') as HTMLInputElement;
-  const results = document.getElementById('results') as HTMLDivElement;
-  const emptyState = document.getElementById('empty-state') as HTMLDivElement;
-  const status = document.getElementById('search-status') as HTMLSpanElement;
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('results');
+  const emptyState = document.getElementById('empty-state');
+  const status = document.getElementById('search-status');
 
   // Fetch search data on page load
   async function loadSearchData() {
     try {
-      status.textContent = '加载中...';
+      status.textContent = t.loading;
       const res = await fetch('/search-index.json');
       if (!res.ok) throw new Error('Failed to load search index');
       searchData = await res.json();
       status.textContent = '';
     } catch (err) {
       console.error('Failed to load search index:', err);
-      status.textContent = '加载失败';
+      status.textContent = t.loadingFailed;
     }
   }
 
@@ -146,15 +184,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     if (!query) {
       results.innerHTML = '';
       emptyState.style.display = 'block';
-      emptyState.querySelector('p')!.textContent = '输入关键词搜索文章';
+      emptyState.querySelector('p').textContent = t.emptyHint;
       status.textContent = '';
       return;
     }
 
-    status.textContent = '搜索中...';
+    status.textContent = t.searching;
     debounceTimer = setTimeout(() => {
       if (searchData.length === 0) {
-        status.textContent = '数据加载中...';
+        status.textContent = t.dataLoading;
         loadSearchData().then(() => {
           const searchResults = fuzzySearch(searchData, query);
           renderResults(searchResults, query);
@@ -166,18 +204,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }, 100);
   });
 
-  function renderResults(searchResults: any[], query: string) {
+  function renderResults(searchResults, query) {
     if (searchResults.length === 0) {
       results.innerHTML = '';
       emptyState.style.display = 'block';
-      emptyState.querySelector('p')!.textContent = `没有找到"${escapeHtml(query)}"相关文章`;
+      emptyState.querySelector('p').textContent = `${t.noResults} "${escapeHtml(query)}"`;
       status.textContent = '';
       return;
     }
 
     emptyState.style.display = 'none';
-    status.textContent = `找到 ${searchResults.length} 个结果`;
-    results.innerHTML = searchResults.map((r: any) => renderResult(r.item, query)).join('');
+    status.textContent = t.resultCount.replace('{count}', searchResults.length);
+    results.innerHTML = searchResults.map((r) => renderResult(r.item, query)).join('');
   }
 
   // Load search data when page loads

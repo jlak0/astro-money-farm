@@ -6,11 +6,21 @@ const friendLinksEnabled = friendLinksConfig.enabled ?? true;
 const groups = friendLinksConfig.groups || [];
 const openInNewTab = friendLinksConfig.openInNewTab ?? true;
 const enabledGroups = groups.filter((g: any) => g.sites && g.sites.length > 0);
+
+const siteConfig = config as any;
+const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+
+const labels = {
+  'zh-CN': { title: '🏠 优秀站点' },
+  'en-US': { title: '🏠 Featured Sites' }
+};
+
+const t = labels[lang] || labels['zh-CN'];
 ---
 
 {friendLinksEnabled && enabledGroups.length > 0 && (
   <section class="friend-links">
-    <h2 class="section-title">🏠 优秀站点</h2>
+    <h2 class="section-title">{t.title}</h2>
     {enabledGroups.map(group => (
       <div class="link-group">
         <h3 class="group-title">{group.name}</h3>
