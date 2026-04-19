@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           version: 9
 
@@ -118,8 +118,8 @@ jobs:
   build-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v5
         with:
           version: 9
       - uses: actions/setup-node@v4
