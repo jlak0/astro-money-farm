@@ -8,10 +8,10 @@
     "build": "turbo run build",
     "clean": "turbo run clean",
     "deploy": "turbo run deploy",
-    "deploy:cloudflare": "turbo run deploy:cloudflare"
+    "deploy:cloudflare": "turbo run deploy-Cloudflare"
   },
   "devDependencies": {
     "turbo": "^2.0.0"
   },
-  "packageManager": "pnpm@9"
+  "packageManager": "pnpm@9.0.0"
 }
