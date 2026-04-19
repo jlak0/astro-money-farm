@@ -60,6 +60,27 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
+  sites/weight-loss:
+    dependencies:
+      '@astro-money-farm/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@astrojs/check':
+        specifier: ^0.9.8
+        version: 0.9.8(prettier@3.8.3)(typescript@5.9.3)
+      '@astrojs/sitemap':
+        specifier: ^3.7.2
+        version: 3.7.2
+      astro:
+        specifier: ^4.16.19
+        version: 4.16.19(@types/node@24.12.2)(rollup@4.60.2)(typescript@5.9.3)
+      pagefind:
+        specifier: ^1.5.2
+        version: 1.5.2
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
 packages:
 
   '@astrojs/check@0.9.8':

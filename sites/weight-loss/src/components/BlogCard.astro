@@ -1,0 +1,131 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, description, publishDate, tags, category, readingTime } = post.data;
+
+const formattedDate = new Date(publishDate).toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+---
+
+<article class="blog-card">
+  <a href={`/blog/${post.slug}`} class="card-link">
+    <div class="card-meta">
+      <span class="card-category">{category}</span>
+      <span class="card-date">{formattedDate}</span>
+    </div>
+    <h3 class="card-title">{title}</h3>
+    <p class="card-excerpt">{description}</p>
+    <div class="card-footer">
+      <div class="card-tags">
+        {tags?.slice(0, 3).map(tag => (
+          <span class="card-tag">{tag}</span>
+        ))}
+      </div>
+      <span class="card-reading-time">{readingTime}</span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .blog-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-link {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    text-decoration: none;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .card-date {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .card-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-excerpt {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .card-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border-radius: 0.25rem;
+  }
+
+  .card-reading-time {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+</style>

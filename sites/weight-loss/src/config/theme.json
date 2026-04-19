@@ -1,0 +1,31 @@
+{
+  "name": "energy",
+  "colors": {
+    "light": {
+      "primary": "#f97316",
+      "primaryDark": "#ea580c",
+      "background": "#fffbf7",
+      "backgroundSecondary": "#fff7ed",
+      "text": "#1c1917",
+      "textSecondary": "#78716c",
+      "border": "#fed7aa"
+    },
+    "dark": {
+      "primary": "#fb923c",
+      "primaryDark": "#fdba74",
+      "background": "#1c1917",
+      "backgroundSecondary": "#292524",
+      "text": "#fafaf9",
+      "textSecondary": "#a8a29e",
+      "border": "#f97316"
+    }
+  },
+  "font": {
+    "family": "'Nunito', -apple-system, sans-serif"
+  },
+  "radius": {
+    "small": "4px",
+    "medium": "8px",
+    "large": "16px"
+  }
+}

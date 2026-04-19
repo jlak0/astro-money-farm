@@ -1,0 +1,21 @@
+{
+  "name": "@astro-money-farm/site-weight-loss",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "build": "astro build",
+    "preview": "astro preview",
+    "clean": "rm -rf dist .astro",
+    "deploy": "pnpm build && wrangler pages deploy dist",
+    "deploy:cloudflare": "pnpm build && wrangler pages deploy dist --project-name=$npm_package_name"
+  },
+  "dependencies": {
+    "@astro-money-farm/core": "workspace:*",
+    "@astrojs/check": "^0.9.8",
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^4.16.19",
+    "pagefind": "^1.5.2",
+    "typescript": "^5.9.3"
+  }
+}
