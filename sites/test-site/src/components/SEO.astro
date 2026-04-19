@@ -1,0 +1,110 @@
+---
+import config from '../config';
+
+export interface Props {
+  title: string;
+  description: string;
+  keywords?: string[];
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  publishDate?: string;
+  modifiedDate?: string;
+  author?: string;
+  tags?: string[];
+}
+
+const {
+  title,
+  description,
+  keywords = [],
+  canonical,
+  ogImage = '/og-default.svg',
+  ogType = 'website',
+  publishDate,
+  modifiedDate,
+  author = '站长',
+  tags = []
+} = Astro.props;
+
+const siteUrl = config.site?.url || 'https://your-domain.com';
+const siteName = config.site?.name || '变现学堂';
+const siteDesc = config.site?.description || '';
+
+const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+const canonicalUrl = canonical || new URL(Astro.url.pathname, siteUrl).href;
+
+const jsonLdWebsite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: siteName,
+  url: siteUrl,
+  description: siteDesc,
+  potentialAction: {
+    '@type': 'SearchAction',
+    'target': `${siteUrl}/search?q={search_term_string}`,
+    'query-input': 'required name=search_term_string'
+  }
+};
+
+const jsonLdArticle = publishDate ? {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  image: fullOgImage,
+  author: {
+    '@type': 'Person',
+    name: author
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: siteName,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/favicon.svg`
+    }
+  },
+  datePublished: publishDate,
+  dateModified: modifiedDate || publishDate,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': canonicalUrl
+  },
+  keywords: keywords.join(', '),
+  articleSection: tags[0] || '未分类'
+} : null;
+---
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+<meta name="keywords" content={keywords.join(', ')} />
+<meta name="author" content={author} />
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={fullOgImage} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="zh_CN" />
+{publishDate && <meta property="article:published_time" content={publishDate} />}
+{modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
+{author && <meta property="article:author" content={author} />}
+{tags.map(tag => <meta property="article:tag" content={tag} />)}
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={canonicalUrl} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={fullOgImage} />
+{config.social?.twitter && <meta property="twitter:site" content={`@${config.social.twitter}`} />}
+
+<!-- JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify(jsonLdWebsite)} />
+{jsonLdArticle && <script type="application/ld+json" set:html={JSON.stringify(jsonLdArticle)} />}

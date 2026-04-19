@@ -1,0 +1,19 @@
+{
+  "name": "astro-money-farm",
+  "version": "1.0.0",
+  "private": true,
+  "description": "内容农场Monorepo - 使用Astro构建的多站点SEO博客集群",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "clean": "turbo run clean",
+    "deploy": "turbo run deploy",
+    "deploy:cloudflare": "turbo run deploy:cloudflare"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  },
+  "keywords": ["astro", "monorepo", "seo", "money-site"],
+  "license": "ISC",
+  "packageManager": "pnpm@9.0.0"
+}

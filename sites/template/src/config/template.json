@@ -1,0 +1,110 @@
+{
+  "_template_version": "1.0",
+  "_description": "站群模板默认配置 - 复制此文件为 site.json 并修改使用",
+  "site": {
+    "name": "站点名称",
+    "description": "网站描述，用于 SEO 和首页展示",
+    "url": "https://your-domain.com",
+    "lang": "zh-CN"
+  },
+  "ads": {
+    "enabled": false,
+    "placements": {
+      "top": true,
+      "inline": true,
+      "sidebar": false
+    },
+    "google": {
+      "enabled": false,
+      "clientId": "ca-pub-XXXXXXXXXX",
+      "slotTop": "1234567890",
+      "slotInline": "1234567891",
+      "slotSidebar": "1234567892"
+    },
+    "custom": {
+      "topBanner": "",
+      "inlineAd": "",
+      "sidebarAd": ""
+    }
+  },
+  "subscribe": {
+    "enabled": true,
+    "title": "订阅获取最新干货",
+    "description": "每周3篇深度文章，助你副业赚钱",
+    "placeholder": "输入你的邮箱"
+  },
+  "social": {
+    "twitter": "",
+    "github": "",
+    "email": "contact@example.com"
+  },
+  "analytics": {
+    "enabled": false,
+    "baidu": "",
+    "umami": {
+      "enabled": false,
+      "url": "",
+      "id": ""
+    }
+  },
+  "affiliate": {
+    "enabled": true,
+    "links": {
+      "amazon": "",
+      "awin": ""
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 站点名称. All rights reserved.",
+    "ICP": "",
+    "police": ""
+  },
+  "links": {
+    "friendlyLinks": {
+      "groups": [
+        {
+          "name": "变现相关",
+          "sites": [
+            {
+              "name": "站点名称",
+              "url": "https://example.com",
+              "description": "站点描述",
+              "logo": "/images/logo.png",
+              "priority": 1,
+              "nofollow": false
+            }
+          ]
+        }
+      ],
+      "globalNofollow": false,
+      "openInNewTab": true
+    },
+    "internalLinks": {
+      "autoLink": {
+        "enabled": true,
+        "keywords": [
+          {
+            "from": "关键词",
+            "to": "/blog/目标文章slug"
+          }
+        ]
+      },
+      "relatedPosts": {
+        "enabled": true,
+        "maxCount": 5,
+        "matchBy": "category"
+      },
+      "contextualLinks": {
+        "enabled": true,
+        "linksPerParagraph": 1
+      }
+    },
+    "exclusions": {
+      "paths": [
+        "/about",
+        "/contact"
+      ],
+      "domains": []
+    }
+  }
+}

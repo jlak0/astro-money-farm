@@ -1,0 +1,17 @@
+{
+  "name": "@astro-money-farm/core",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./index.ts",
+  "exports": {
+    "./components": "./components/index.ts",
+    "./layouts": "./layouts/index.ts",
+    "./config": "./config/index.ts",
+    "./utils": "./utils/index.ts",
+    "./styles": "./styles/global.css",
+    "./templates": "./templates/index.ts"
+  },
+  "dependencies": {
+    "astro": "^4.16.19"
+  }
+}

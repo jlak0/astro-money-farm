@@ -1,0 +1,90 @@
+---
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import config from '../config';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  keywords?: string[];
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+}
+
+const { title, description, keywords, canonical, ogImage, ogType } = Astro.props;
+
+const siteUrl = config.site?.url || 'https://your-domain.com';
+const siteName = config.site?.name || '变现学堂';
+const googleAdsEnabled = config.ads?.google?.enabled && config.ads?.google?.clientId;
+const analyticsEnabled = config.analytics?.enabled;
+const baiduAnalytics = config.analytics?.baidu;
+const umamiAnalytics = config.analytics?.umami?.enabled;
+const umamiUrl = config.analytics?.umami?.url;
+const umamiId = config.analytics?.umami?.id;
+---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      // Prevent theme flash - run before render
+      (function() {
+        const cookies = document.cookie.split(';').reduce((acc, c) => {
+          const [k, v] = c.trim().split('=');
+          acc[k] = v;
+          return acc;
+        }, {});
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (cookies['theme'] === 'dark' || (!cookies['theme'] && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <SEO
+      title={title}
+      description={description}
+      keywords={keywords}
+      canonical={canonical}
+      ogImage={ogImage}
+      ogType={ogType}
+    />
+    {googleAdsEnabled && (
+      <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${config.ads.google.clientId}`} crossorigin="anonymous"></script>
+    )}
+  </head>
+  <body>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+
+    {googleAdsEnabled && (
+      <script is:inline>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    )}
+
+    {analyticsEnabled && baiduAnalytics && (
+      <script is:inline define:vars={{ baiduId: baiduAnalytics }}>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?" + baiduId;
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      </script>
+    )}
+
+    {analyticsEnabled && umamiAnalytics && umamiUrl && umamiId && (
+      <script defer data-website-id={umamiId} src={umamiUrl}></script>
+    )}
+  </body>
+</html>

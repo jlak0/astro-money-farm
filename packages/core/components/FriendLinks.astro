@@ -1,0 +1,122 @@
+---
+import config from '../config';
+
+const friendLinksConfig = config.friendLinks || {};
+const friendLinksEnabled = friendLinksConfig.enabled ?? true;
+const groups = friendLinksConfig.groups || [];
+const openInNewTab = friendLinksConfig.openInNewTab ?? true;
+const enabledGroups = groups.filter((g: any) => g.sites && g.sites.length > 0);
+---
+
+{friendLinksEnabled && enabledGroups.length > 0 && (
+  <section class="friend-links">
+    <h2 class="section-title">🏠 优秀站点</h2>
+    {enabledGroups.map(group => (
+      <div class="link-group">
+        <h3 class="group-title">{group.name}</h3>
+        <div class="links-grid">
+          {group.sites.map(site => (
+            <a
+              href={site.url}
+              class="friend-link-item"
+              target={openInNewTab ? '_blank' : '_self'}
+              rel={site.nofollow ? 'nofollow noopener' : 'noopener'}
+            >
+              {site.logo && (
+                <img src={site.logo} alt={site.name} class="link-logo" loading="lazy" />
+              )}
+              <div class="link-info">
+                <span class="link-name">{site.name}</span>
+                {site.description && (
+                  <span class="link-desc">{site.description}</span>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+)}
+
+<style>
+  .friend-links { margin: 2rem 0; }
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 1.25rem;
+  }
+
+  .link-group { margin-bottom: 1.5rem; }
+
+  .group-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .friend-link-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+
+  .friend-link-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: var(--accent-color);
+  }
+
+  :global(.dark) .friend-link-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  .link-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .link-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .link-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .link-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

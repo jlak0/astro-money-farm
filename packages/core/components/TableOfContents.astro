@@ -1,0 +1,120 @@
+---
+export interface Props {
+  headings: { depth: number; text: string; slug: string }[];
+}
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+{filteredHeadings.length > 0 && (
+  <nav class="table-of-contents" aria-label="文章目录">
+    <details class="toc-details">
+      <summary class="toc-title">📑 目录</summary>
+      <ul class="toc-list">
+        {filteredHeadings.map(heading => (
+          <li class={`toc-item toc-depth-${heading.depth}`}>
+            <a href={`#${heading.slug}`} class="toc-link">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+  </nav>
+)}
+
+<style>
+  /* 通用样式 */
+  .table-of-contents {
+    margin-bottom: 1.5rem;
+  }
+
+  .toc-details {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  .toc-title {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0.875rem 1rem;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+
+  .toc-title::-webkit-details-marker {
+    display: none;
+  }
+
+  .toc-details[open] .toc-title {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.75rem 1rem;
+  }
+
+  .toc-item {
+    margin-bottom: 0.4rem;
+  }
+
+  .toc-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .toc-depth-3 {
+    padding-left: 1rem;
+  }
+
+  .toc-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: block;
+    padding: 0.25rem 0;
+    transition: color 0.2s;
+  }
+
+  .toc-link:hover {
+    color: var(--accent-color);
+  }
+
+  .toc-link.active {
+    color: var(--accent-color);
+    font-weight: 500;
+  }
+</style>
+
+<script>
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const headingElements = document.querySelectorAll('article h2, article h3');
+
+  function updateActiveLink() {
+    let current = '';
+    headingElements.forEach(heading => {
+      const rect = heading.getBoundingClientRect();
+      if (rect.top <= 100) {
+        current = heading.id;
+      }
+    });
+
+    tocLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${current}`) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveLink, { passive: true });
+</script>
