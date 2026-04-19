@@ -40,33 +40,31 @@ jobs:
       - name: Build all sites
         run: pnpm build
 
-      - name: Cache build outputs
-        uses: actions/cache@v4
+      - name: Upload build outputs
+        uses: actions/upload-artifact@v4
         with:
-          path: sites/*/dist
-          key: dist-${{ runner.os }}-${{ github.sha }}
-          restore-keys: |
-            dist-${{ runner.os }}-
+          name: dist-${{ matrix.site }}
+          path: sites/${{ matrix.site }}/dist
+          retention-days: 1
+        strategy:
+          matrix:
+            site: [template, test-site, weight-loss]
 
   deploy-cloudflare:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && secrets.CLOUDFLARE_API_TOKEN != ''
+    if: github.ref == 'refs/heads/main'
     
     strategy:
       matrix:
         site: [template, test-site, weight-loss]
     
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Restore build outputs
-        uses: actions/cache@v4
+      - name: Download build outputs
+        uses: actions/download-artifact@v4
         with:
+          name: dist-${{ matrix.site }}
           path: sites/${{ matrix.site }}/dist
-          key: dist-${{ runner.os }}-${{ github.sha }}
-          restore-keys: |
-            dist-${{ runner.os }}-
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
