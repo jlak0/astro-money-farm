@@ -1,6 +1,5 @@
 #!/bin/bash
 # Usage: ./scripts/create-post.sh <site> <title> [tags]
-# Example: ./scripts/create-post.sh test-site "How to do SEO" "SEO,Tutorial"
 
 if [ -z "$1" ] || [ -z "$2" ]; then
   echo "Usage: ./scripts/create-post.sh <site> <title> [tags]"
@@ -10,37 +9,47 @@ fi
 SITE=$1
 TITLE=$2
 TAGS=${3:-"Tutorial"}
-SLUG=$(echo "$TITLE" | sed 's/ /-/g' | sed 's/[^a-zA-Z0-9-]//g' | tr '[:upper:]' '[:lower:]')
 DATE=$(date +%Y-%m-%d)
+
+# Use node to generate proper slug (handles Chinese)
+SLUG=$(node -e "
+  const title = '$TITLE';
+  const slug = title
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9\u4e00-\u9fa5-]/g, '')
+    .substring(0, 50) || Date.now();
+  console.log(slug);
+")
+
 FILENAME="sites/$SITE/src/content/blog/${DATE}-${SLUG}.md"
 
-cat > "$FILENAME" << 'EOF'
+# Format tags
+QUOTED_TAGS=$(node -e "console.log('[\"' + '$TAGS'.split(',').join('\", \"') + '\"]')")
+
+cat > "$FILENAME" << EOF
 ---
-title: "{{TITLE}}"
-description: "{{TITLE}} detailed guide"
-pubDate: {{DATE}}
+title: "$TITLE"
+description: "$TITLE详细指南"
+pubDate: $DATE
 author: "Money Farm"
-tags: [{{TAGS}}]
+tags: $QUOTED_TAGS
 cover: ""
 ---
 
-# {{TITLE}}
+# $TITLE
 
-## Introduction
+## 前言
 
-This article introduces the core concepts of {{TITLE}}.
+本文介绍$TITLE的核心内容。
 
-## Main Content
+## 正文
 
-Write your content here...
+在这里撰写你的文章内容...
 
-## Summary
+## 总结
 
-That's all about {{TITLE}}.
+以上就是关于$TITLE的全部内容。
 EOF
-
-sed -i "s/{{TITLE}}/$TITLE/g" "$FILENAME"
-sed -i "s/{{DATE}}/$DATE/g" "$FILENAME"
-sed -i "s/{{TAGS}}/$TAGS/g" "$FILENAME"
 
 echo "Created: $FILENAME"
