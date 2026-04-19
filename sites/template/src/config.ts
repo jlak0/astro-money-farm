@@ -1,3 +1,3 @@
-import config from '../site.config.json';
+import config from './config/site.json';
 
 export default config;
