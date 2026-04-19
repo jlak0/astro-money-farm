@@ -13,11 +13,5 @@
   "devDependencies": {
     "turbo": "^2.0.0"
   },
-  "keywords": [
-    "astro",
-    "monorepo",
-    "seo",
-    "money-site"
-  ],
-  "license": "ISC"
+  "packageManager": "pnpm"
 }
