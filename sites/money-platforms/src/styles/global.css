@@ -154,6 +154,45 @@ button {
   margin: 1.5rem 0;
 }
 
+/* 表格样式 */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  display: table;
+}
+
+.prose th,
+.prose td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border: 1px solid var(--border-color);
+}
+
+.prose th {
+  background: var(--bg-secondary);
+  font-weight: 600;
+}
+
+.prose tr:nth-child(even) {
+  background: var(--bg-secondary);
+}
+
+.prose table {
+  border: 1px solid var(--border-color);
+}
+
+@media (max-width: 640px) {
+  .prose table {
+    font-size: 0.85rem;
+  }
+  .prose th, .prose td {
+    padding: 0.5rem;
+  }
+}
+
 /* 滚动条样式 */
 ::-webkit-scrollbar {
   width: 8px;

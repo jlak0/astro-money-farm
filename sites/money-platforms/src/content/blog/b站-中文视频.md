@@ -2,7 +2,7 @@
 title: "B站"
 description: "中国年轻人最喜欢的视频平台，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['视频内容', '中文']
+tags: ["视频内容", "中文"]
 category: "视频内容"
 author: "AI变现指南"
 featured: false

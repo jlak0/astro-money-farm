@@ -2,7 +2,7 @@
 title: "Patreon"
 description: "创作者订阅平台，粉丝付费获取独家内容，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['知识付费', '订阅']
+tags: ["知识付费", "订阅"]
 category: "知识付费"
 author: "AI变现指南"
 featured: false

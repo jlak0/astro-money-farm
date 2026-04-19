@@ -2,7 +2,7 @@
 title: "itch.io"
 description: "独立游戏发行平台，抽成低，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['游戏', '独立游戏']
+tags: ["游戏", "独立游戏"]
 category: "游戏"
 author: "AI变现指南"
 featured: false

@@ -2,7 +2,7 @@
 title: "Lemon Squeezed"
 description: "低抽成数字商店，抽成仅5-8%，比Gumroad更低，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['数字产品', '低抽成']
+tags: ["数字产品", "低抽成"]
 category: "数字产品"
 author: "AI变现指南"
 featured: false

@@ -2,7 +2,7 @@
 title: "Product Hunt"
 description: "AI工具/SaaS产品发布平台，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['AI工具']
+tags: ["AI工具"]
 category: "AI工具"
 author: "AI变现指南"
 featured: false

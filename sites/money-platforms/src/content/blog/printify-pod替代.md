@@ -2,7 +2,7 @@
 title: "Printify"
 description: "Printful竞争对手，更多工厂选择，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['按需印刷', 'POD']
+tags: ["按需印刷", "POD"]
 category: "按需印刷"
 author: "AI变现指南"
 featured: false

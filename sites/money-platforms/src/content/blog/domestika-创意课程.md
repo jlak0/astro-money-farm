@@ -2,7 +2,7 @@
 title: "Domestika"
 description: "创意类课程平台，设计、插画、摄影，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['课程教育', '创意']
+tags: ["课程教育", "创意"]
 category: "课程教育"
 author: "AI变现指南"
 featured: false

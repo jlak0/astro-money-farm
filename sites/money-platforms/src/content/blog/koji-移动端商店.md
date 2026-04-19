@@ -2,7 +2,7 @@
 title: "Koji"
 description: "移动端优化的数字产品平台，适合社交媒体变现，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['数字产品', '移动端']
+tags: ["数字产品", "移动端"]
 category: "数字产品"
 author: "AI变现指南"
 featured: false

@@ -2,7 +2,7 @@
 title: "YouTube"
 description: "全球最大视频平台，广告分成赚钱，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['视频内容', '广告分成']
+tags: ["视频内容", "广告分成"]
 category: "视频内容"
 author: "AI变现指南"
 featured: false

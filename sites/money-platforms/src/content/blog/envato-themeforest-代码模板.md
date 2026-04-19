@@ -2,7 +2,7 @@
 title: "Envato / ThemeForest"
 description: "全球最大的代码模板市场，开发者必选，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['数字产品', '代码模板']
+tags: ["数字产品", "代码模板"]
 category: "数字产品"
 author: "AI变现指南"
 featured: false

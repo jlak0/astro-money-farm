@@ -2,7 +2,7 @@
 title: "Steady"
 description: "德国版Patreon，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['其他']
+tags: ["其他"]
 category: "其他"
 author: "AI变现指南"
 featured: false

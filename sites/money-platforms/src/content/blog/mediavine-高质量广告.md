@@ -2,7 +2,7 @@
 title: "Mediavine"
 description: "高质量博客广告，CPM高，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['广告联盟']
+tags: ["广告联盟"]
 category: "广告联盟"
 author: "AI变现指南"
 featured: false

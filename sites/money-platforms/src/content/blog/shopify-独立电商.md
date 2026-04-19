@@ -2,7 +2,7 @@
 title: "Shopify"
 description: "搭建独立电商网站，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['电商']
+tags: ["电商"]
 category: "电商"
 author: "AI变现指南"
 featured: false

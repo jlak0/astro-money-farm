@@ -2,7 +2,7 @@
 title: "TikTok"
 description: "全球最大的短视频平台，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['视频内容', '短视频']
+tags: ["视频内容", "短视频"]
 category: "视频内容"
 author: "AI变现指南"
 featured: false

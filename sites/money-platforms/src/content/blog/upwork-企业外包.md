@@ -2,7 +2,7 @@
 title: "Upwork"
 description: "企业外包平台，适合大项目，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['自由职业', '外包']
+tags: ["自由职业", "外包"]
 category: "自由职业"
 author: "AI变现指南"
 featured: false

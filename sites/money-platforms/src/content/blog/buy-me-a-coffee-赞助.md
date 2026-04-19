@@ -2,7 +2,7 @@
 title: "Buy Me a Coffee"
 description: "轻量级赞助平台，一次性打赏，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['知识付费', '赞助']
+tags: ["知识付费", "赞助"]
 category: "知识付费"
 author: "AI变现指南"
 featured: false

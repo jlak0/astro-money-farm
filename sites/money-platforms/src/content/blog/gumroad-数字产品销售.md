@@ -2,7 +2,7 @@
 title: "Gumroad"
 description: "数字产品销售平台，适合卖代码、模板、电子书、prompt库，包含注册步骤、AI自动化方案、变现技巧和评分。"
 publishDate: 2026-04-19
-tags: ['数字产品', 'Gumroad', '被动收入']
+tags: ["数字产品", "Gumroad", "被动收入"]
 category: "数字产品"
 author: "AI变现指南"
 featured: false
