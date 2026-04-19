@@ -7,12 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-
+    
     steps:
       - uses: actions/checkout@v4
 
@@ -27,26 +24,57 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: |
+            .turbo
+            sites/*/.astro
+          key: turbo-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            turbo-${{ runner.os }}-
+
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build all sites
         run: pnpm build
-        env:
-          TURBO_TOKEN: ${{ secrets.TURBO_API_TOKEN }}
-          TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+      - name: Cache build outputs
+        uses: actions/cache@v4
+        with:
+          path: sites/*/dist
+          key: dist-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            dist-${{ runner.os }}-
+
+  deploy-cloudflare:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    strategy:
+      matrix:
+        site: [template, test-site, weight-loss]
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore build outputs
+        uses: actions/cache@v4
+        with:
+          path: sites/${{ matrix.site }}/dist
+          key: dist-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            dist-${{ runner.os }}-
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: |
-            site-template
-            test-site
+          projectName: ${{ matrix.site }}
           directory: sites/${{ matrix.site }}/dist
-        matrix:
-          site: [template, test-site]
 
   build-check:
     runs-on: ubuntu-latest
