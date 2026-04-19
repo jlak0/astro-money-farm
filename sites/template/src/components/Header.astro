@@ -1,11 +1,21 @@
 ---
+import { getCollection } from 'astro:content';
 import ThemeToggle from './ThemeToggle.astro';
+import config from '../config';
+
+const siteName = config.site?.name || '变现学堂';
+
+// 动态获取分类，生成导航项
+const allPosts = await getCollection('blog');
+const categories = [...new Set(allPosts.map(post => post.data.category))];
 
 const navItems = [
   { href: '/', label: '首页' },
   { href: '/blog', label: '文章' },
-  { href: '/blog/category/AI变现', label: 'AI变现' },
-  { href: '/blog/category/副业', label: '副业' },
+  ...categories.map(cat => ({
+    href: `/blog/category/${cat}`,
+    label: cat
+  })),
   { href: '/about', label: '关于' },
   { href: '/friends', label: '友链' }
 ];
@@ -20,7 +30,7 @@ const currentPath = Astro.url.pathname;
         <circle cx="16" cy="16" r="14" fill="currentColor"/>
         <text x="16" y="21" font-size="14" font-weight="bold" text-anchor="middle" fill="white">$</text>
       </svg>
-      <span>我的站点</span>
+      <span>{siteName}</span>
     </a>
 
     <button class="mobile-menu-btn" aria-label="菜单" aria-expanded="false">
