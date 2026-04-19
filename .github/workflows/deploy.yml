@@ -43,36 +43,74 @@ jobs:
       - name: Upload build outputs
         uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.site }}
-          path: sites/${{ matrix.site }}/dist
-          retention-days: 1
-        strategy:
-          matrix:
-            site: [template, test-site, weight-loss]
+          name: dist-template
+          path: sites/template/dist
 
-  deploy-cloudflare:
+      - name: Upload build outputs - test-site
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-test-site
+          path: sites/test-site/dist
+
+      - name: Upload build outputs - weight-loss
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-weight-loss
+          path: sites/weight-loss/dist
+
+  deploy-template:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
-    strategy:
-      matrix:
-        site: [template, test-site, weight-loss]
-    
     steps:
-      - name: Download build outputs
+      - name: Download build
         uses: actions/download-artifact@v4
         with:
-          name: dist-${{ matrix.site }}
-          path: sites/${{ matrix.site }}/dist
-
+          name: dist-template
+          path: sites/template/dist
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ matrix.site }}
-          directory: sites/${{ matrix.site }}/dist
+          projectName: template
+          directory: sites/template/dist
+
+  deploy-test-site:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-test-site
+          path: sites/test-site/dist
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: test-site
+          directory: sites/test-site/dist
+
+  deploy-weight-loss:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-weight-loss
+          path: sites/weight-loss/dist
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: weight-loss
+          directory: sites/weight-loss/dist
 
   build-check:
     runs-on: ubuntu-latest
