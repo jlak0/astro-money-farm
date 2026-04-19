@@ -51,7 +51,7 @@ jobs:
   deploy-cloudflare:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && secrets.CLOUDFLARE_API_TOKEN != ''
     
     strategy:
       matrix:
