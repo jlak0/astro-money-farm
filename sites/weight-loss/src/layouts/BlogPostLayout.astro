@@ -10,6 +10,7 @@ import RelatedPosts from '../components/RelatedPosts.astro';
 import FriendLinks from '../components/FriendLinks.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
 import { getCollection } from 'astro:content';
+import config from '../config';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -20,7 +21,57 @@ const { title, description, publishDate, modifiedDate, tags, category, author, o
 
 const { Content, headings } = await post.render();
 
-// 获取相关文章 - 标签重合度算法
+const siteConfig = config as any;
+const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+
+// Locale-aware date formatting
+const localeMap: Record<string, string> = {
+  'zh-CN': 'zh-CN',
+  'en-US': 'en-US',
+  'en': 'en-US',
+  'zh': 'zh-CN'
+};
+
+const dateLocale = localeMap[lang] || 'en-US';
+const formattedDate = new Date(publishDate).toLocaleDateString(dateLocale, {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// i18n labels
+const labels = {
+  'zh-CN': {
+    siteName: '变现学堂',
+    topAd: '顶部广告',
+    desktopToc: '桌面端目录',
+    sidebarAd: '侧边栏广告',
+    mobileToc: '移动端目录',
+    emailSubscribe: '邮箱订阅',
+    affiliateTitle: '推荐工具：XXX - 帮你提高10倍效率',
+    affiliateDesc: '我自己用了2年,确实大幅提升了工作效率。现在注册还送免费试用。',
+    affiliatePlatform: '联盟',
+    inlineAd: '文中广告',
+    relatedPosts: '相关文章'
+  },
+  'en-US': {
+    siteName: 'FastWeightLoss',
+    topAd: 'Advertisement',
+    desktopToc: 'Table of Contents',
+    sidebarAd: 'Advertisement',
+    mobileToc: 'Table of Contents',
+    emailSubscribe: 'Newsletter',
+    affiliateTitle: 'Recommended Tool: XXX - 10x Your Productivity',
+    affiliateDesc: 'I have been using this for 2 years and it has significantly improved my efficiency. Free trial available.',
+    affiliatePlatform: 'Sponsored',
+    inlineAd: 'Advertisement',
+    relatedPosts: 'Related Posts'
+  }
+};
+
+const t = labels[lang] || labels['zh-CN'];
+
+// Get related posts - tag matching algorithm
 const allPosts = await getCollection('blog');
 const relatedPosts = allPosts
   .filter(p => p.slug !== post.slug)
@@ -33,16 +84,10 @@ const relatedPosts = allPosts
   .sort((a, b) => b.score - a.score)
   .slice(0, 3)
   .map(item => item.post);
-
-const formattedDate = new Date(publishDate).toLocaleDateString('zh-CN', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric'
-});
 ---
 
 <BaseLayout
-  title={`${title} | 变现学堂`}
+  title={`${title} | ${t.siteName}`}
   description={description}
   keywords={tags}
   ogType="article"
@@ -51,7 +96,7 @@ const formattedDate = new Date(publishDate).toLocaleDateString('zh-CN', {
   <ReadingProgress />
 
   <article class="blog-post" data-pagefind-meta="title:@title, category:@category">
-    <!-- 顶部广告 -->
+    <!-- Top Ad -->
     <AdBanner position="top" />
 
     <header class="post-header">
@@ -72,41 +117,40 @@ const formattedDate = new Date(publishDate).toLocaleDateString('zh-CN', {
 
     <div class="post-layout">
       <aside class="post-sidebar">
-        <!-- 桌面端目录（侧边栏 sticky） -->
+        <!-- Desktop TOC (sticky sidebar) -->
         <div class="desktop-toc">
           <TableOfContents headings={headings} />
         </div>
 
-        <!-- 侧边栏广告 -->
+        <!-- Sidebar Ad -->
         <AdBanner position="sidebar" />
       </aside>
 
       <div class="post-content">
-        <!-- 移动端目录（在正文之前，可折叠） -->
+        <!-- Mobile TOC (collapsible, before content) -->
         <div class="mobile-toc">
           <TableOfContents headings={headings} />
         </div>
 
-        <!-- 邮箱订阅 -->
+        <!-- Email Subscribe -->
         <EmailSubscribe />
 
         <div class="prose">
           <Content />
         </div>
 
-        <!-- 示例联盟链接 -->
+        <!-- Sample Affiliate Link -->
         <AffiliateLink
           href="https://example.com/affiliate"
-          title="推荐工具：XXX - 帮你提高10倍效率"
-          description="我自己用了2年,确实大幅提升了工作效率。现在注册还送免费试用。"
-          platform="联盟"
+          title={t.affiliateTitle}
+          description={t.affiliateDesc}
+          platform={t.affiliatePlatform}
         />
 
-        <!-- 文中广告 -->
+        <!-- Inline Ad -->
         <AdBanner position="inline" />
 
-        <!-- 相关文章 -->
-        <!-- 相关文章 -->
+        <!-- Related Posts -->
         {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
         <FriendLinks />
       </div>

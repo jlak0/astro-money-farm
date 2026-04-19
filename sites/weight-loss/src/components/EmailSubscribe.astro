@@ -1,12 +1,30 @@
 ---
 import config from '../config';
 
-const { enabled, title, description, placeholder } = {
-  enabled: config.subscribe?.enabled ?? true,
-  title: config.subscribe?.title ?? '订阅获取最新干货',
-  description: config.subscribe?.description ?? '每周3篇深度文章，助你副业赚钱',
-  placeholder: config.subscribe?.placeholder ?? '输入你的邮箱'
+const siteConfig = config as any;
+const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+
+const labels = {
+  'zh-CN': {
+    title: '订阅获取最新干货',
+    description: '每周3篇深度文章，助你副业赚钱',
+    placeholder: '输入你的邮箱',
+    button: '订阅',
+    note: '已订阅 10,000+ 读者 · 随时退订',
+    ariaLabel: '邮箱地址'
+  },
+  'en-US': {
+    title: 'Get Weekly Weight Loss Tips',
+    description: '3 in-depth articles weekly to help you reach your goals',
+    placeholder: 'Enter your email',
+    button: 'Subscribe',
+    note: '10,000+ subscribers · Unsubscribe anytime',
+    ariaLabel: 'Email address'
+  }
 };
+
+const t = labels[lang] || labels['zh-CN'];
+const { enabled } = config.subscribe ?? { enabled: true };
 ---
 
 {enabled && (
@@ -18,21 +36,21 @@ const { enabled, title, description, placeholder } = {
           <polyline points="22,6 12,13 2,6"></polyline>
         </svg>
       </div>
-      <h3 class="subscribe-title">{title}</h3>
-      <p class="subscribe-desc">{description}</p>
+      <h3 class="subscribe-title">{t.title}</h3>
+      <p class="subscribe-desc">{t.description}</p>
       <form class="subscribe-form" action="#" method="POST">
         <div class="form-group">
           <input
             type="email"
             name="email"
-            placeholder={placeholder}
+            placeholder={t.placeholder}
             required
             class="email-input"
-            aria-label="邮箱地址"
+            aria-label={t.ariaLabel}
           />
-          <button type="submit" class="subscribe-btn">订阅</button>
+          <button type="submit" class="subscribe-btn">{t.button}</button>
         </div>
-        <p class="subscribe-note">已订阅 10,000+ 读者 · 随时退订</p>
+        <p class="subscribe-note">{t.note}</p>
       </form>
     </div>
   </section>

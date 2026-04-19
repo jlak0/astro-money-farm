@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import config from '../config';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -8,7 +9,20 @@ export interface Props {
 const { post } = Astro.props;
 const { title, description, publishDate, tags, category, readingTime } = post.data;
 
-const formattedDate = new Date(publishDate).toLocaleDateString('zh-CN', {
+const siteConfig = config as any;
+const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+
+// Locale-aware date formatting
+const localeMap: Record<string, string> = {
+  'zh-CN': 'zh-CN',
+  'en-US': 'en-US',
+  'en': 'en-US',
+  'zh': 'zh-CN'
+};
+
+const dateLocale = localeMap[lang] || 'en-US';
+
+const formattedDate = new Date(publishDate).toLocaleDateString(dateLocale, {
   year: 'numeric',
   month: 'long',
   day: 'numeric'

@@ -1,10 +1,38 @@
 ---
 import config from '../config';
 
-const { name, description } = config.site || { name: '变现学堂', description: '' };
-const { copyright, ICP, police } = config.footer || {};
-const { email } = config.social || {};
+const siteConfig = config as any;
+const { name, description } = siteConfig.site || { name: 'My Site', description: '' };
+const { copyright, ICP, police } = siteConfig.footer || {};
+const { email } = siteConfig.social || {};
+const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
 
+const labels = {
+  'zh-CN': {
+    quickLinks: '快速链接',
+    allPosts: '全部文章',
+    aboutUs: '关于我们',
+    categories: '文章分类',
+    contact: '联系方式',
+    emailContact: 'Email联系',
+    sitemap: '网站地图',
+    icp: 'ICP备案',
+    police: '公安备案'
+  },
+  'en-US': {
+    quickLinks: 'Quick Links',
+    allPosts: 'All Posts',
+    aboutUs: 'About Us',
+    categories: 'Categories',
+    contact: 'Contact',
+    emailContact: 'Email',
+    sitemap: 'Sitemap',
+    icp: 'ICP',
+    police: 'Police'
+  }
+};
+
+const t = labels[lang] || labels['zh-CN'];
 const currentYear = new Date().getFullYear();
 ---
 
@@ -24,29 +52,29 @@ const currentYear = new Date().getFullYear();
 
       <div class="footer-links">
         <div class="footer-column">
-          <h4>快速链接</h4>
+          <h4>{t.quickLinks}</h4>
           <ul>
-            <li><a href="/">首页</a></li>
-            <li><a href="/blog">全部文章</a></li>
-            <li><a href="/about">关于我们</a></li>
+            <li><a href="/">{t.allPosts}</a></li>
+            <li><a href="/blog">{t.allPosts}</a></li>
+            <li><a href="/about">{t.aboutUs}</a></li>
           </ul>
         </div>
 
         <div class="footer-column">
-          <h4>文章分类</h4>
+          <h4>{t.categories}</h4>
           <ul>
-            <li><a href="/blog/category/AI变现">AI变现</a></li>
-            <li><a href="/blog/category/副业">副业</a></li>
-            <li><a href="/blog/category/干货">干货</a></li>
-            <li><a href="/blog/category/法国创业">法国创业</a></li>
+            <li><a href="/blog/category/Intermittent Fasting">Intermittent Fasting</a></li>
+            <li><a href="/blog/category/Keto Diet">Keto Diet</a></li>
+            <li><a href="/blog/category/Low Carb">Low Carb</a></li>
+            <li><a href="/blog/category/Tips">Tips</a></li>
           </ul>
         </div>
 
         <div class="footer-column">
-          <h4>联系方式</h4>
+          <h4>{t.contact}</h4>
           <ul>
-            {email && <li><a href={`mailto:${email}`}>Email联系</a></li>}
-            <li><a href="/sitemap.xml">网站地图</a></li>
+            {email && <li><a href={`mailto:${email}`}>{t.emailContact}</a></li>}
+            <li><a href="/sitemap.xml">{t.sitemap}</a></li>
           </ul>
         </div>
       </div>
@@ -55,8 +83,8 @@ const currentYear = new Date().getFullYear();
     <div class="footer-bottom">
       <p>
         {copyright || `© ${currentYear} ${name}. All rights reserved.`}
-        {ICP && <> · <a href={ICP} target="_blank" rel="noopener">ICP备案</a></>}
-        {police && <> · <a href={police} target="_blank" rel="noopener">公安备案</a></>}
+        {ICP && <> · <a href={ICP} target="_blank" rel="noopener">{t.icp}</a></>}
+        {police && <> · <a href={police} target="_blank" rel="noopener">{t.police}</a></>}
       </p>
       <p>Powered by <a href="https://astro.build" target="_blank" rel="noopener">Astro</a></p>
     </div>
