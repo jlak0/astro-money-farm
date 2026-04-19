@@ -9,7 +9,7 @@ const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
 
 {filteredHeadings.length > 0 && (
   <nav class="table-of-contents" aria-label="文章目录">
-    <details class="toc-details">
+    <details class="toc-details" open>
       <summary class="toc-title">📑 目录</summary>
       <ul class="toc-list">
         {filteredHeadings.map(heading => (
@@ -96,6 +96,12 @@ const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
 </style>
 
 <script>
+  // Desktop: open by default; Mobile: closed by default
+  const tocDetails = document.querySelector('.toc-details');
+  if (window.innerWidth < 768) {
+    tocDetails?.removeAttribute('open');
+  }
+  
   const tocLinks = document.querySelectorAll('.toc-link');
   const headingElements = document.querySelectorAll('article h2, article h3');
 
