@@ -1,15 +1,41 @@
 {
   "site": {
-    "name": "Fast Weight Loss",
-    "title": "FastWeightLoss - Intermittent Fasting & Weight Loss Guide",
-    "description": "Expert guide to intermittent fasting, healthy weight loss, and wellness. Science-backed tips for lasting results.",
-    "url": "https://fastweightloss.com"
+    "name": "FastWeightLoss",
+    "description": "Expert guide to intermittent fasting and healthy weight loss",
+    "url": "https://fastweightloss.com",
+    "lang": "en-US"
   },
-  "author": {
-    "name": "Weight Loss Expert",
-    "bio": "Health & wellness writer focused on evidence-based weight loss strategies."
+  "ads": {
+    "enabled": false,
+    "placements": {
+      "top": true,
+      "inline": true,
+      "sidebar": false
+    }
+  },
+  "subscribe": {
+    "enabled": false,
+    "title": "Subscribe for Updates",
+    "description": "Weekly tips for healthy weight loss",
+    "placeholder": "Enter your email"
   },
   "social": {
-    "twitter": "@fastweightloss"
+    "twitter": "",
+    "github": "",
+    "email": "contact@example.com"
+  },
+  "analytics": {
+    "enabled": false,
+    "baidu": "",
+    "umami": {
+      "enabled": false,
+      "url": "",
+      "id": ""
+    }
+  },
+  "footer": {
+    "copyright": "© 2026 FastWeightLoss. All rights reserved.",
+    "ICP": "",
+    "police": ""
   }
 }
