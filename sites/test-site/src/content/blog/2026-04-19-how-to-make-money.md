@@ -1,10 +1,11 @@
 ---
 title: "How to Make Money"
 description: "How to Make Money详细指南"
-pubDate: 2026-04-19
-author: "Money Farm"
+publishDate: 2026-04-19
 tags: ["Money", "Guide"]
-cover: ""
+category: "干货"
+author: "站长"
+featured: false
 ---
 
 # How to Make Money

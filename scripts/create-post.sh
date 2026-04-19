@@ -1,14 +1,15 @@
 #!/bin/bash
-# Usage: ./scripts/create-post.sh <site> <title> [tags]
+# Usage: ./scripts/create-post.sh <site> <title> [tags] [category]
 
 if [ -z "$1" ] || [ -z "$2" ]; then
-  echo "Usage: ./scripts/create-post.sh <site> <title> [tags]"
+  echo "Usage: ./scripts/create-post.sh <site> <title> [tags] [category]"
   exit 1
 fi
 
 SITE=$1
 TITLE=$2
-TAGS=${3:-"Tutorial"}
+TAGS=${3:-"教程"}
+CATEGORY=${4:-"干货"}
 DATE=$(date +%Y-%m-%d)
 
 # Use node to generate proper slug (handles Chinese)
@@ -31,10 +32,11 @@ cat > "$FILENAME" << EOF
 ---
 title: "$TITLE"
 description: "$TITLE详细指南"
-pubDate: $DATE
-author: "Money Farm"
+publishDate: $DATE
 tags: $QUOTED_TAGS
-cover: ""
+category: "$CATEGORY"
+author: "站长"
+featured: false
 ---
 
 # $TITLE
