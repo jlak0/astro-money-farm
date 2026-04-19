@@ -18,7 +18,7 @@ importers:
         specifier: ^4.16.19
         version: 4.16.19(@types/node@24.12.2)(rollup@4.60.2)(typescript@5.9.3)
 
-  sites/template:
+  sites/money-platforms:
     dependencies:
       '@astro-money-farm/core':
         specifier: workspace:*
@@ -39,7 +39,7 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
-  sites/test-site:
+  sites/template:
     dependencies:
       '@astro-money-farm/core':
         specifier: workspace:*

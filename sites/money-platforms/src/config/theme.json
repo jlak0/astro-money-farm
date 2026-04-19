@@ -1,0 +1,31 @@
+{
+  "name": "default",
+  "colors": {
+    "light": {
+      "primary": "#10b981",
+      "primaryDark": "#059669",
+      "background": "#ffffff",
+      "backgroundSecondary": "#f8fafc",
+      "text": "#1e293b",
+      "textSecondary": "#64748b",
+      "border": "#e2e8f0"
+    },
+    "dark": {
+      "primary": "#10b981",
+      "primaryDark": "#34d399",
+      "background": "#0f172a",
+      "backgroundSecondary": "#1e293b",
+      "text": "#f1f5f9",
+      "textSecondary": "#94a3b8",
+      "border": "#334155"
+    }
+  },
+  "font": {
+    "family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+  },
+  "radius": {
+    "small": "4px",
+    "medium": "8px",
+    "large": "16px"
+  }
+}
