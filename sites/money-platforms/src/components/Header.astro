@@ -11,11 +11,7 @@ const categories = [...new Set(allPosts.map(post => post.data.category))];
 
 const navItems = [
   { href: '/', label: '首页' },
-  { href: '/blog', label: '文章' },
-  ...categories.map(cat => ({
-    href: `/blog/category/${cat}`,
-    label: cat
-  })),
+  { href: '/blog', label: '全部文章' },
   { href: '/about', label: '关于' },
   { href: '/friends', label: '友链' }
 ];
