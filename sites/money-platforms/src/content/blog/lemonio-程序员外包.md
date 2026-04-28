@@ -9,8 +9,6 @@ featured: false
 readingTime: "12分钟"
 ---
 
-# Lemon.io
-
 ## 平台简介
 
 Lemon.io成立于2019年，是专注于AI、区块链和一般软件开发项目的程序员外包平台。与其他外包平台不同，Lemon.io对开发者有严格的筛选，只接纳高质量的开发者。

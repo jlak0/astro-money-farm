@@ -9,8 +9,6 @@ featured: false
 readingTime: "12分钟"
 ---
 
-# Substack
-
 ## 平台简介
 
 Substack成立于2017年，是全球最流行的Newsletter（付费邮件订阅）平台之一。平台帮助创作者通过邮件 newsletter 建立付费读者群，已有数百万创作者在上面写作。

@@ -8,8 +8,6 @@ author: "Weight Loss Expert"
 featured: false
 ---
 
-# Intermittent Fasting vs Keto: Which is Better?
-
 ## Key Differences
 
 **Intermittent Fasting** controls WHEN you eat

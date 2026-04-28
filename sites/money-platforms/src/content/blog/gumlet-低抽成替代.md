@@ -9,8 +9,6 @@ featured: false
 readingTime: "11分钟'"
 ---
 
-# Gumlet
-
 ## 平台简介
 
 Gumlet是一家新兴的数字产品销售平台，以极低的抽成（仅5%）和简洁的界面吸引创作者。平台于2020年成立，虽然知名度不如Gumroad，但正在快速增长。

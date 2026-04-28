@@ -1,26 +1,6 @@
 /* 全局样式 */
 :root {
-  /* 浅色主题 */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --border-color: #e2e8f0;
-  --accent-color: #10b981;
-  --accent-color-dark: #059669;
-}
-
-.dark {
-  /* 深色主题 */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --border-color: #334155;
-  --accent-color: #10b981;
-  --accent-color-dark: #34d399;
+  --container-max: 1200px;
 }
 
 * {
@@ -170,6 +150,43 @@ button {
 .prose img {
   border-radius: 0.5rem;
   margin: 1.5rem 0;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  overflow-x: auto;
+  display: table;
+  border: 1px solid var(--border-color);
+}
+
+.prose th,
+.prose td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border: 1px solid var(--border-color);
+}
+
+.prose th {
+  background: var(--bg-secondary);
+  font-weight: 600;
+}
+
+.prose tr:nth-child(even) {
+  background: var(--bg-secondary);
+}
+
+@media (max-width: 640px) {
+  .prose table {
+    font-size: 0.85rem;
+  }
+
+  .prose th,
+  .prose td {
+    padding: 0.5rem;
+  }
 }
 
 /* 滚动条样式 */

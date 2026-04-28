@@ -9,8 +9,6 @@ featured: false
 readingTime: "15分钟"
 ---
 
-# Product Hunt
-
 ## 平台简介
 
 Product Hunt成立于2013年，是全球最大的产品发布平台，被称为"新产品 Launchpad"。每天平台会精选当天发布的最新互联网产品，让创业者、创作者展示他们的作品，获取早期用户和媒体关注。

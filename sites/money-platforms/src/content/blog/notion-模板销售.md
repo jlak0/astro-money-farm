@@ -9,8 +9,6 @@ featured: false
 readingTime: "12分钟"
 ---
 
-# Notion模板
-
 ## 平台简介
 
 Notion是一款流行的笔记和协作工具，全球用户超过2000万。创作者可以制作Notion模板（dashboard、笔记系统、项目管理等）并在 Gumroad、Koji等平台出售。

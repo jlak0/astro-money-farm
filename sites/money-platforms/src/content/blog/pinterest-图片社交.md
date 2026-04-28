@@ -9,8 +9,6 @@ featured: false
 readingTime: "14分钟"
 ---
 
-# Pinterest
-
 ## 平台简介
 
 Pinterest成立于2010年，是全球最大的图片社交平台之一，月活用户超过4亿。与其他社交平台不同，Pinterest用户有明确的购买意向，70%的用户使用Pinterest来决定购买什么。

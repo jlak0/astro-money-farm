@@ -1,24 +1,39 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
-import SEO from '../components/SEO.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import AdBanner from '../components/AdBanner.astro';
-import AffiliateLink from '../components/AffiliateLink.astro';
 import EmailSubscribe from '../components/EmailSubscribe.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
 import FriendLinks from '../components/FriendLinks.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
 import { getCollection } from 'astro:content';
+import defaultConfig, { getLang, type SiteConfig } from '../config';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
+  config?: SiteConfig;
 }
 
-const { post } = Astro.props;
+const { post, config = defaultConfig } = Astro.props;
 const { title, description, publishDate, modifiedDate, tags, category, author, ogImage } = post.data;
 
 const { Content, headings } = await post.render();
+const lang = getLang(config);
+const localeMap: Record<string, string> = {
+  'zh-CN': 'zh-CN',
+  'en-US': 'en-US'
+};
+const labels = {
+  'zh-CN': {
+    siteName: config.site?.name || '变现学堂'
+  },
+  'en-US': {
+    siteName: config.site?.name || 'FastWeightLoss'
+  }
+};
+
+const t = labels[lang];
 
 // 获取相关文章 - 标签重合度算法
 const allPosts = await getCollection('blog');
@@ -34,7 +49,7 @@ const relatedPosts = allPosts
   .slice(0, 3)
   .map(item => item.post);
 
-const formattedDate = new Date(publishDate).toLocaleDateString('zh-CN', {
+const formattedDate = new Date(publishDate).toLocaleDateString(localeMap[lang] || 'en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric'
@@ -42,17 +57,22 @@ const formattedDate = new Date(publishDate).toLocaleDateString('zh-CN', {
 ---
 
 <BaseLayout
-  title={`${title} | 变现学堂`}
+  title={`${title} | ${t.siteName}`}
   description={description}
   keywords={tags}
   ogType="article"
   ogImage={ogImage}
+  publishDate={publishDate.toISOString()}
+  modifiedDate={(modifiedDate || publishDate).toISOString()}
+  author={author}
+  tags={tags}
+  config={config}
 >
   <ReadingProgress />
 
-  <article class="blog-post" data-pagefind-meta="title:@title, category:@category">
+  <article class="blog-post">
     <!-- 顶部广告 -->
-    <AdBanner position="top" />
+    <AdBanner position="top" config={config} />
 
     <header class="post-header">
       <div class="container">
@@ -74,41 +94,33 @@ const formattedDate = new Date(publishDate).toLocaleDateString('zh-CN', {
       <aside class="post-sidebar">
         <!-- 桌面端目录（侧边栏 sticky） -->
         <div class="desktop-toc">
-          <TableOfContents headings={headings} />
+          <TableOfContents headings={headings} config={config} />
         </div>
 
         <!-- 侧边栏广告 -->
-        <AdBanner position="sidebar" />
+        <AdBanner position="sidebar" config={config} />
       </aside>
 
       <div class="post-content">
         <!-- 移动端目录（在正文之前，可折叠） -->
         <div class="mobile-toc">
-          <TableOfContents headings={headings} />
+          <TableOfContents headings={headings} config={config} />
         </div>
 
         <!-- 邮箱订阅 -->
-        <EmailSubscribe />
+        <EmailSubscribe config={config} />
 
         <div class="prose">
           <Content />
         </div>
 
-        <!-- 示例联盟链接 -->
-        <AffiliateLink
-          href="https://example.com/affiliate"
-          title="推荐工具：XXX - 帮你提高10倍效率"
-          description="我自己用了2年,确实大幅提升了工作效率。现在注册还送免费试用。"
-          platform="联盟"
-        />
-
         <!-- 文中广告 -->
-        <AdBanner position="inline" />
+        <AdBanner position="inline" config={config} />
 
         <!-- 相关文章 -->
         <!-- 相关文章 -->
-        {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
-        <FriendLinks />
+        {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} config={config} />}
+        <FriendLinks config={config} />
       </div>
     </div>
   </article>

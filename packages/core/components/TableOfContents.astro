@@ -1,16 +1,33 @@
 ---
+import { getLang, type SiteConfig, type SupportedLang } from '../config';
+
 export interface Props {
   headings: { depth: number; text: string; slug: string }[];
+  config?: SiteConfig;
+  lang?: SupportedLang;
 }
 
-const { headings } = Astro.props;
+const { headings, config, lang: langProp } = Astro.props;
 const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+const lang = langProp || (config ? getLang(config) : 'zh-CN');
+const labels = {
+  'zh-CN': {
+    title: '📑 目录',
+    ariaLabel: '文章目录'
+  },
+  'en-US': {
+    title: '📑 Contents',
+    ariaLabel: 'Table of Contents'
+  }
+};
+
+const t = labels[lang];
 ---
 
 {filteredHeadings.length > 0 && (
-  <nav class="table-of-contents" aria-label="文章目录">
-    <details class="toc-details">
-      <summary class="toc-title">📑 目录</summary>
+  <nav class="table-of-contents" aria-label={t.ariaLabel}>
+    <details class="toc-details" open>
+      <summary class="toc-title">{t.title}</summary>
       <ul class="toc-list">
         {filteredHeadings.map(heading => (
           <li class={`toc-item toc-depth-${heading.depth}`}>
@@ -96,6 +113,11 @@ const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
 </style>
 
 <script>
+  const tocDetails = document.querySelector('.toc-details');
+  if (window.innerWidth < 768) {
+    tocDetails?.removeAttribute('open');
+  }
+
   const tocLinks = document.querySelectorAll('.toc-link');
   const headingElements = document.querySelectorAll('article h2, article h3');
 

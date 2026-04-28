@@ -1,14 +1,21 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getLang, type SiteConfig } from '../config';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
+  config?: SiteConfig;
 }
 
-const { post } = Astro.props;
+const { post, config } = Astro.props;
 const { title, description, publishDate, tags, category, readingTime } = post.data;
+const lang = config ? getLang(config) : 'zh-CN';
+const localeMap: Record<string, string> = {
+  'zh-CN': 'zh-CN',
+  'en-US': 'en-US'
+};
 
-const formattedDate = new Date(publishDate).toLocaleDateString('zh-CN', {
+const formattedDate = new Date(publishDate).toLocaleDateString(localeMap[lang] || 'en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric'

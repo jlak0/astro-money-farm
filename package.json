@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "check": "turbo run check",
+    "check:core-sharing": "node scripts/assert-core-sharing.mjs",
     "clean": "turbo run clean",
     "deploy": "turbo run deploy",
     "deploy:cloudflare": "turbo run deploy-Cloudflare"

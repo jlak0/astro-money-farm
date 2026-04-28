@@ -1,9 +1,7 @@
 ---
+import { AdBanner, BaseLayout, BlogCard } from '@astro-money-farm/core/components';
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import BlogCard from '../../../components/BlogCard.astro';
-import AdBanner from '../../../components/AdBanner.astro';
-import config from '../../../config';
+import siteConfig, { getLang } from '../../../config';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -22,8 +20,7 @@ export async function getStaticPaths() {
 
 const { tag, posts } = Astro.props;
 
-const siteConfig = config as any;
-const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+const lang = getLang();
 
 const labels = {
   'zh-CN': {
@@ -43,7 +40,7 @@ const labels = {
 const t = labels[lang] || labels['zh-CN'];
 ---
 
-<BaseLayout 
+<BaseLayout config={siteConfig} 
   title={`#${tag} | ${t.siteName}`} 
   description={t.metaDesc}
 >
@@ -62,15 +59,15 @@ const t = labels[lang] || labels['zh-CN'];
 
     <div class="container">
       <main class="posts-section">
-        <AdBanner position="top" />
+        <AdBanner config={siteConfig} position="top" />
 
         <div class="posts-grid">
           {posts.map(post => (
-            <BlogCard post={post} />
+            <BlogCard config={siteConfig} post={post} />
           ))}
         </div>
 
-        <AdBanner position="inline" />
+        <AdBanner config={siteConfig} position="inline" />
       </main>
     </div>
   </div>

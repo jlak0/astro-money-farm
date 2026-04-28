@@ -24,7 +24,6 @@ const siteName = getArg('name', '我的站点');
 const siteDomain = getArg('domain', 'example.com');
 const siteDesc = getArg('desc', '分享实用干货');
 const siteEmail = getArg('email', `contact@${siteDomain}`);
-const siteAuthor = getArg('author', '站长');
 
 // 颜色输出
 const log = {
@@ -129,9 +128,9 @@ console.log('══════════════════════�
 console.log('');
 console.log('📋 下一步：');
 console.log(`   1. cd ${rootDir}`);
-console.log('   2. npm install');
+  console.log('   2. pnpm install');
 console.log('   3. pnpm dev    # 本地预览');
-console.log('   4. npm run build  # 构建部署');
+  console.log('   4. pnpm build  # 构建部署');
 console.log('');
 console.log(`🌐 站点信息：`);
 console.log(`   名称: ${siteName}`);

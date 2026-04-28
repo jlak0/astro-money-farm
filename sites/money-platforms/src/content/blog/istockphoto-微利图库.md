@@ -9,8 +9,6 @@ featured: false
 readingTime: "11分钟"
 ---
 
-# iStockphoto
-
 ## 平台简介
 
 iStockphoto成立于2000年，是全球最著名的微利图库之一，原为加拿大公司，后被Getty Images收购。平台为全球150多个国家的客户提供高质量的图片、视频和矢量图。

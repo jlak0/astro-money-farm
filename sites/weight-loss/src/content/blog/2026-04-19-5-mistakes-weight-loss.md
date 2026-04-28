@@ -8,8 +8,6 @@ author: "Weight Loss Expert"
 featured: false
 ---
 
-# 5 Mistakes That Stop Your Weight Loss
-
 ## Mistake 1: Eating Too Many Calories
 Even "healthy" foods can cause weight gain if eaten in excess.
 

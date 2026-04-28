@@ -9,8 +9,6 @@ featured: false
 readingTime: "9分钟'"
 ---
 
-# Fanbox
-
 ## 平台简介
 
 Fanbox是由日本知名画师社区Pixiv运营的创作者订阅平台，成立于2018年。主要服务日本市场，支持创意内容创作者。

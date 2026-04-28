@@ -9,8 +9,6 @@ featured: false
 readingTime: "13分钟"
 ---
 
-# Adobe Stock
-
 ## 平台简介
 
 Adobe Stock是Adobe官方提供的图库平台，与Photoshop、Illustrator、InDesign等Adobe软件深度集成。用户可以在Adobe软件中直接搜索和购买素材，非常方便。

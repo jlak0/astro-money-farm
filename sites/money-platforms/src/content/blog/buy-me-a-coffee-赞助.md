@@ -9,8 +9,6 @@ featured: false
 readingTime: "11分钟"
 ---
 
-# Buy Me a Coffee
-
 ## 平台简介
 
 Buy Me a Coffee成立于2021年，是一款轻量级的创作者赞助平台，让粉丝可以通过一次性付款"买咖啡"的方式支持创作者。相比Patreon，它更简单、更直接，没有订阅压力。

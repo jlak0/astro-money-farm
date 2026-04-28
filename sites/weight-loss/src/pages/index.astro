@@ -1,13 +1,9 @@
 ---
+import { AdBanner, BaseLayout, BlogCard, EmailSubscribe } from '@astro-money-farm/core/components';
 import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import BlogCard from '../components/BlogCard.astro';
-import AdBanner from '../components/AdBanner.astro';
-import EmailSubscribe from '../components/EmailSubscribe.astro';
-import config from '../config';
+import siteConfig, { getLang } from '../config';
 
-const siteConfig = config as any;
-const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+const lang = getLang();
 
 const labels = {
   'zh-CN': {
@@ -63,7 +59,7 @@ const categories = lang === 'en-US' ? [
 ];
 ---
 
-<BaseLayout
+<BaseLayout config={siteConfig}
   title={t.metaTitle}
   description={t.metaDesc}
 >
@@ -83,7 +79,7 @@ const categories = lang === 'en-US' ? [
   </section>
 
   <!-- Top Ad -->
-  <AdBanner position="top" />
+  <AdBanner config={siteConfig} position="top" />
 
   <!-- Featured Posts -->
   <section class="featured-section">
@@ -91,7 +87,7 @@ const categories = lang === 'en-US' ? [
       <h2 class="section-title">{t.featured}</h2>
       <div class="featured-grid">
         {featuredPosts.map(post => (
-          <BlogCard post={post} />
+          <BlogCard config={siteConfig} post={post} />
         ))}
       </div>
     </div>
@@ -116,7 +112,7 @@ const categories = lang === 'en-US' ? [
   <!-- Email Subscribe -->
   <section class="subscribe-section">
     <div class="container">
-      <EmailSubscribe />
+      <EmailSubscribe config={siteConfig} />
     </div>
   </section>
 
@@ -129,14 +125,14 @@ const categories = lang === 'en-US' ? [
       </div>
       <div class="posts-grid">
         {recentPosts.map(post => (
-          <BlogCard post={post} />
+          <BlogCard config={siteConfig} post={post} />
         ))}
       </div>
     </div>
   </section>
 
   <!-- Bottom Ad -->
-  <AdBanner position="inline" />
+  <AdBanner config={siteConfig} position="inline" />
 </BaseLayout>
 
 <style>

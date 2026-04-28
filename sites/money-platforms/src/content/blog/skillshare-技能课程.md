@@ -9,8 +9,6 @@ featured: false
 readingTime: "15分钟'"
 ---
 
-# Skillshare
-
 ## 平台简介
 
 Skillshare成立于2011年，是一家专注于创意和实践技能的在线学习平台。与Udemy不同，Skillshare采用订阅制模式，用户每月支付固定费用即可访问所有课程，而讲师按课程观看时长获得报酬。

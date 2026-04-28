@@ -1,24 +1,19 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import FriendLinks from '../components/FriendLinks.astro';
-import siteConfig from '../config';
+import { BaseLayout, FriendLinks } from '@astro-money-farm/core/components';
+import siteConfig, { getSiteUrl } from '../config';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
-const friendLinksConfig = siteConfig.friendLinks || {};
 const socialConfig = siteConfig.social || {};
-
-// Get network sites count
-const networkSites = allPosts
-  .filter(p => p.data.category)
-  .map(p => ({ category: p.data.category, slug: p.slug }));
+const siteUrl = getSiteUrl();
+const siteName = siteConfig.site.name;
 
 const stats = {
   articles: allPosts.length,
   categories: [...new Set(allPosts.map(p => p.data.category))].length,
 };
 ---
-<BaseLayout
+<BaseLayout config={siteConfig}
   title="友链 & 站群网络 | 变现学堂"
   description="与优秀站点交换链接，共同成长。变现学堂站群网络，汇聚AI变现、副业创业、法国签证等优质内容。"
 >
@@ -54,10 +49,10 @@ const stats = {
           </div>
           <div class="rules-card">
             <h3>交换格式</h3>
-            <pre class="link-code">名称：变现学堂
-网址：https://your-domain.com
+            <pre class="link-code">{`名称：${siteName}
+网址：${siteUrl}
 描述：分享AI变现、副业赚钱、法国创业等实战方法
-Logo：https://your-domain.com/og-default.svg</pre>
+Logo：${siteUrl}/og-default.svg`}</pre>
           </div>
         </div>
         <div class="apply-cta">
@@ -66,7 +61,7 @@ Logo：https://your-domain.com/og-default.svg</pre>
       </section>
 
       <section class="friend-links-section">
-        <FriendLinks />
+        <FriendLinks config={siteConfig} />
       </section>
 
       <section class="network-section">

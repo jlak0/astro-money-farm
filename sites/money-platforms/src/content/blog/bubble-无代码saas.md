@@ -9,8 +9,6 @@ featured: false
 readingTime: "11分钟"
 ---
 
-# Bubble
-
 ## 平台简介
 
 Bubble成立于2012年，是最强大的无代码Web应用构建平台之一。创作者可以用它构建复杂的SaaS产品、市场平台、内部工具等，不需要编程技能。

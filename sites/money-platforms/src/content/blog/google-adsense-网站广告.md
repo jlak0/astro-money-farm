@@ -9,8 +9,6 @@ featured: false
 readingTime: "16分钟"
 ---
 
-# Google AdSense
-
 ## 平台简介
 
 Google AdSense是Google提供的广告变现服务，让网站主通过展示与内容相关的Google广告获得收入。是目前全球最普及的网站变现方式之一，覆盖数百万网站。

@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
 
 # 构建命令（在 Cloudflare Pages 控制台设置）
-# Build command: npm run build
+# Build command: pnpm build
 # Output directory: dist
 
 # 环境变量（如需要）

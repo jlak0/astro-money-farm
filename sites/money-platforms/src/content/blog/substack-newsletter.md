@@ -9,8 +9,6 @@ featured: false
 readingTime: "16分钟"
 ---
 
-# Substack
-
 ## 平台简介
 
 Substack成立于2017年，是专门为 newsletter（邮件通讯）设计的写作和变现平台。它的核心理念是"让创作者直接向读者收费"，跳过传统广告模式。

@@ -1,9 +1,9 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import EmailSubscribe from '../components/EmailSubscribe.astro';
+import { BaseLayout, EmailSubscribe } from '@astro-money-farm/core/components';
+import siteConfig from '../config';
 ---
 
-<BaseLayout
+<BaseLayout config={siteConfig}
   title="关于站长 | 变现学堂"
   description="了解变现学堂站长的背景和故事"
 >
@@ -79,7 +79,7 @@ import EmailSubscribe from '../components/EmailSubscribe.astro';
           </ul>
         </section>
 
-        <EmailSubscribe />
+        <EmailSubscribe config={siteConfig} />
       </div>
     </div>
   </div>

@@ -1,8 +1,7 @@
 ---
+import { AdBanner, BaseLayout, BlogCard } from '@astro-money-farm/core/components';
+import siteConfig from '../../config';
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import BlogCard from '../../components/BlogCard.astro';
-import AdBanner from '../../components/AdBanner.astro';
 
 const allPosts = await getCollection('blog');
 const sortedPosts = allPosts.sort((a, b) =>
@@ -13,7 +12,7 @@ const categories = [...new Set(allPosts.map(p => p.data.category))];
 const tags = [...new Set(allPosts.flatMap(p => p.data.tags || []))];
 ---
 
-<BaseLayout title="全部文章 | 变现学堂" description="浏览博客所有文章，探索AI变现、副业、法国创业等实用干货。">
+<BaseLayout config={siteConfig} title="全部文章 | 变现学堂" description="浏览博客所有文章，探索AI变现、副业、法国创业等实用干货。">
   <div class="blog-page">
     <header class="page-header">
       <div class="container">
@@ -52,15 +51,15 @@ const tags = [...new Set(allPosts.flatMap(p => p.data.tags || []))];
 
       <!-- Posts -->
       <main class="posts-section">
-        <AdBanner position="top" />
+        <AdBanner config={siteConfig} position="top" />
 
         <div class="posts-grid">
           {sortedPosts.map(post => (
-            <BlogCard post={post} />
+            <BlogCard config={siteConfig} post={post} />
           ))}
         </div>
 
-        <AdBanner position="inline" />
+        <AdBanner config={siteConfig} position="inline" />
       </main>
     </div>
   </div>

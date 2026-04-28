@@ -9,8 +9,6 @@ featured: false
 readingTime: "13分钟'"
 ---
 
-# Domestika
-
 ## 平台简介
 
 Domestika成立于2013年，是面向创意工作者的在线课程平台。平台以高质量的创意类课程闻名，包括设计、插画、摄影、动画等领域。与Udemy不同，Domestika对课程质量要求更高，用户也愿意为高质量内容付费。

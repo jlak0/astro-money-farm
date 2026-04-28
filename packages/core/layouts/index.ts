@@ -1,2 +1,2 @@
-export { default as BaseLayout } from './BaseLayout.astro';
-export { default as BlogPostLayout } from './BlogPostLayout.astro';
+export { default as BaseLayout } from '../components/BaseLayout.astro';
+export { default as BlogPostLayout } from '../components/BlogPostLayout.astro';

@@ -9,8 +9,6 @@ featured: false
 readingTime: "17分钟"
 ---
 
-# Upwork
-
 ## 平台简介
 
 Upwork成立于2015年（由Elance和oDesk合并），是全球最大的自由职业平台之一。与Fiverr不同，Upwork主要面向企业客户，项目金额通常较大，从数百到数万美元不等。

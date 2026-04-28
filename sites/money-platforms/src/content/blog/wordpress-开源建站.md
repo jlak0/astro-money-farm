@@ -9,8 +9,6 @@ featured: false
 readingTime: "12分钟"
 ---
 
-# WordPress
-
 ## 平台简介
 
 WordPress成立于2003年，是全球最大的开源建站平台，目前超过40%的网站都使用WordPress。它是建立博客、网站和在线业务的经典选择。

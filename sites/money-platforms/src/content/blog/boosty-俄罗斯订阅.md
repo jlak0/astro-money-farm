@@ -9,8 +9,6 @@ featured: false
 readingTime: "9分钟'"
 ---
 
-# Boosty
-
 ## 平台简介
 
 Boosty成立于2018年，是俄罗斯领先的创作者订阅平台，被称为"俄罗斯版Patreon"。平台为俄语内容创作者提供订阅变现服务。

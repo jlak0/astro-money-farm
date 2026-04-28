@@ -9,8 +9,6 @@ featured: false
 readingTime: "18分钟"
 ---
 
-# Patreon
-
 ## 平台简介
 
 Patreon成立于2013年，是全球最大的创作者订阅平台，帮助创作者建立稳定的月收入。平台涵盖了从YouTuber到作家、从音乐人到视觉艺术家的各类型创作者，目前有超过25万创作者在Patreon上获得收入。

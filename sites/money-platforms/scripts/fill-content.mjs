@@ -337,4 +337,4 @@ ${article.content}
 }
 
 console.log(`\n🎉 完成！共 ${articles.length} 篇示例文章。`);
-console.log('运行 npm run build 重新生成站点。');
+console.log('运行 pnpm build 重新生成站点。');

@@ -2,22 +2,28 @@
 import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import config from '../config';
+import defaultConfig, { buildThemeCSS, getLang, type SiteConfig } from '../config';
 import '../styles/global.css';
 
 export interface Props {
   title: string;
-  description: string;
+  description?: string;
   keywords?: string[];
   canonical?: string;
   ogImage?: string;
   ogType?: 'website' | 'article';
+  publishDate?: string;
+  modifiedDate?: string;
+  author?: string;
+  tags?: string[];
+  config?: SiteConfig;
 }
 
-const { title, description, keywords, canonical, ogImage, ogType } = Astro.props;
+const { title, description, keywords, canonical, ogImage, ogType, publishDate, modifiedDate, author, tags, config = defaultConfig } = Astro.props;
 
-const siteUrl = config.site?.url || 'https://your-domain.com';
-const siteName = config.site?.name || '变现学堂';
+const siteLang = getLang(config);
+const siteDesc = config.site?.description || '';
+const themeCSS = buildThemeCSS(config.theme);
 const googleAdsEnabled = config.ads?.google?.enabled && config.ads?.google?.clientId;
 const analyticsEnabled = config.analytics?.enabled;
 const baiduAnalytics = config.analytics?.baidu;
@@ -27,7 +33,7 @@ const umamiId = config.analytics?.umami?.id;
 ---
 
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang={siteLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -46,24 +52,30 @@ const umamiId = config.analytics?.umami?.id;
         }
       })();
     </script>
+    <style is:global set:html={themeCSS} />
     <SEO
       title={title}
-      description={description}
+      description={description || siteDesc}
       keywords={keywords}
       canonical={canonical}
       ogImage={ogImage}
       ogType={ogType}
+      publishDate={publishDate}
+      modifiedDate={modifiedDate}
+      author={author}
+      tags={tags}
+      config={config}
     />
     {googleAdsEnabled && (
       <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${config.ads.google.clientId}`} crossorigin="anonymous"></script>
     )}
   </head>
   <body>
-    <Header />
-    <main id="main-content">
+    <Header config={config} />
+    <main>
       <slot />
     </main>
-    <Footer />
+    <Footer config={config} />
 
     {googleAdsEnabled && (
       <script is:inline>

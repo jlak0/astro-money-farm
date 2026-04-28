@@ -9,8 +9,6 @@ featured: false
 readingTime: "18分钟"
 ---
 
-# YouTube
-
 ## 平台简介
 
 YouTube成立于2005年，2006年被Google收购，是全球最大的视频平台，拥有超过20亿月活用户。平台覆盖几乎所有内容类型，从个人vlog到专业教程，从音乐到游戏实况。

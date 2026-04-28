@@ -9,8 +9,6 @@ featured: false
 readingTime: "14分钟"
 ---
 
-# Roblox
-
 ## 平台简介
 
 Roblox成立于2004年，是全球最大的游戏创作和玩家平台之一，拥有超过2亿月活用户。创作者可以使用Roblox Studio和Lua语言开发游戏，通过游戏内购、订阅和广告变现。

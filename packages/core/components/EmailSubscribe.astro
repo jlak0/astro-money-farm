@@ -1,11 +1,37 @@
 ---
-import config from '../config';
+import defaultConfig, { getLang, type SiteConfig } from '../config';
 
+export interface Props {
+  config?: SiteConfig;
+}
+
+const { config = defaultConfig } = Astro.props;
+const lang = getLang(config);
+const labels = {
+  'zh-CN': {
+    title: '订阅获取最新干货',
+    description: '每周3篇深度文章，助你副业赚钱',
+    placeholder: '输入你的邮箱',
+    button: '订阅',
+    note: '已订阅 10,000+ 读者 · 随时退订',
+    ariaLabel: '邮箱地址'
+  },
+  'en-US': {
+    title: 'Get Weekly Weight Loss Tips',
+    description: '3 in-depth articles weekly to help you reach your goals',
+    placeholder: 'Enter your email',
+    button: 'Subscribe',
+    note: '10,000+ subscribers · Unsubscribe anytime',
+    ariaLabel: 'Email address'
+  }
+};
+
+const t = labels[lang];
 const { enabled, title, description, placeholder } = {
   enabled: config.subscribe?.enabled ?? true,
-  title: config.subscribe?.title ?? '订阅获取最新干货',
-  description: config.subscribe?.description ?? '每周3篇深度文章，助你副业赚钱',
-  placeholder: config.subscribe?.placeholder ?? '输入你的邮箱'
+  title: config.subscribe?.title || t.title,
+  description: config.subscribe?.description || t.description,
+  placeholder: config.subscribe?.placeholder || t.placeholder
 };
 ---
 
@@ -28,11 +54,11 @@ const { enabled, title, description, placeholder } = {
             placeholder={placeholder}
             required
             class="email-input"
-            aria-label="邮箱地址"
+            aria-label={t.ariaLabel}
           />
-          <button type="submit" class="subscribe-btn">订阅</button>
+          <button type="submit" class="subscribe-btn">{t.button}</button>
         </div>
-        <p class="subscribe-note">已订阅 10,000+ 读者 · 随时退订</p>
+        <p class="subscribe-note">{t.note}</p>
       </form>
     </div>
   </section>

@@ -9,8 +9,6 @@ featured: false
 readingTime: "18分钟"
 ---
 
-# Amazon FBA
-
 ## 平台简介
 
 Amazon FBA（Fulfillment by Amazon）是亚马逊提供的仓储代发货服务。卖家将商品批量发送到亚马逊仓库后，亚马逊负责存储、包装、配送和客服。是目前最流行的跨境电商模式之一，特别适合没有仓储和物流经验的卖家。

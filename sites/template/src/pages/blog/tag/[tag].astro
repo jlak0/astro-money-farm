@@ -1,8 +1,7 @@
 ---
+import { AdBanner, BaseLayout, BlogCard } from '@astro-money-farm/core/components';
+import siteConfig from '../../../config';
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import BlogCard from '../../../components/BlogCard.astro';
-import AdBanner from '../../../components/AdBanner.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -22,7 +21,7 @@ export async function getStaticPaths() {
 const { tag, posts } = Astro.props;
 ---
 
-<BaseLayout 
+<BaseLayout config={siteConfig} 
   title={`#${tag} | 变现学堂`} 
   description={`浏览所有包含#${tag}标签的文章，探索AI变现、副业、法国创业等实用干货。`}
 >
@@ -41,15 +40,15 @@ const { tag, posts } = Astro.props;
 
     <div class="container">
       <main class="posts-section">
-        <AdBanner position="top" />
+        <AdBanner config={siteConfig} position="top" />
 
         <div class="posts-grid">
           {posts.map(post => (
-            <BlogCard post={post} />
+            <BlogCard config={siteConfig} post={post} />
           ))}
         </div>
 
-        <AdBanner position="inline" />
+        <AdBanner config={siteConfig} position="inline" />
       </main>
     </div>
   </div>

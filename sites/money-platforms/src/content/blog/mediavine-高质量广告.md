@@ -9,8 +9,6 @@ featured: false
 readingTime: "14分钟"
 ---
 
-# Mediavine
-
 ## 平台简介
 
 Mediavine成立于2004年，是美国顶级的广告联盟之一，专注于高质量内容网站。与Google AdSense相比，Mediavine提供更高的CPM（千次展示收入），是内容创作者追求更高广告收入的首选平台。

@@ -1,13 +1,39 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import defaultConfig, { getLang, type SiteConfig } from '../config';
 
+export interface Props {
+  config?: SiteConfig;
+}
+
+const { config = defaultConfig } = Astro.props;
+const lang = getLang(config);
+const labels = {
+  'zh-CN': {
+    home: '首页',
+    blog: '全部文章',
+    about: '关于',
+    friends: '友链',
+    search: '搜索',
+    menu: '菜单'
+  },
+  'en-US': {
+    home: 'Home',
+    blog: 'Blog',
+    about: 'About',
+    friends: 'Friends',
+    search: 'Search',
+    menu: 'Menu'
+  }
+};
+
+const t = labels[lang];
+const siteName = config.site?.name || 'My Site';
 const navItems = [
-  { href: '/', label: '首页' },
-  { href: '/blog', label: '文章' },
-  { href: '/blog/category/AI变现', label: 'AI变现' },
-  { href: '/blog/category/副业', label: '副业' },
-  { href: '/about', label: '关于' },
-  { href: '/friends', label: '友链' }
+  { href: '/', label: t.home },
+  { href: '/blog', label: t.blog },
+  { href: '/about', label: t.about },
+  { href: '/friends', label: t.friends }
 ];
 
 const currentPath = Astro.url.pathname;
@@ -20,10 +46,10 @@ const currentPath = Astro.url.pathname;
         <circle cx="16" cy="16" r="14" fill="currentColor"/>
         <text x="16" y="21" font-size="14" font-weight="bold" text-anchor="middle" fill="white">$</text>
       </svg>
-      <span>我的站点</span>
+      <span>{siteName}</span>
     </a>
 
-    <button class="mobile-menu-btn" aria-label="菜单" aria-expanded="false">
+    <button class="mobile-menu-btn" aria-label={t.menu} aria-expanded="false">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"></line>
         <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -45,13 +71,13 @@ const currentPath = Astro.url.pathname;
     </ul>
 
     <div class="nav-actions">
-      <a href="/search" class="search-btn" aria-label="搜索">
+      <a href="/search" class="search-btn" aria-label={t.search}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </a>
-      <ThemeToggle />
+      <ThemeToggle lang={lang} />
     </div>
   </nav>
 </header>
@@ -162,7 +188,12 @@ const currentPath = Astro.url.pathname;
 
   @media (max-width: 768px) {
     .nav-actions {
-      display: none;
+      display: flex;
+      position: absolute;
+      right: 4rem;
+      top: 0;
+      height: 4rem;
+      align-items: center;
     }
 
     .nav-links {

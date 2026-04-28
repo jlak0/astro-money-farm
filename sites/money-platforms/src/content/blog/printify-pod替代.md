@@ -9,8 +9,6 @@ featured: false
 readingTime: "12分钟"
 ---
 
-# Printify
-
 ## 平台简介
 
 Printify成立于2015年，是Printful的主要竞争对手。与Printful类似，Printify连接创作者和印刷厂商，提供按需印刷服务。Printify的优势在于更多的印刷厂商选择和更低的产品价格。

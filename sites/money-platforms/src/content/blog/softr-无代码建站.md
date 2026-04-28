@@ -9,8 +9,6 @@ featured: false
 readingTime: "10分钟"
 ---
 
-# Softr
-
 ## 平台简介
 
 Softr成立于2020年，是一款无需代码的建站工具，允许用户将Airtable数据快速变成网站和Web应用。平台帮助不懂技术的创作者快速构建自己的产品。

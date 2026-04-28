@@ -12,7 +12,7 @@ git clone https://github.com/your-org/astro-money-blog.git your-new-site
 cd your-new-site
 
 # 2. 安装依赖
-npm install
+pnpm install
 
 # 3. 一键初始化站点配置
 node scripts/init-site.mjs \
@@ -24,8 +24,8 @@ node scripts/init-site.mjs \
 pnpm dev
 
 # 5. 部署到 Cloudflare Pages
-npm run build
-# 在 Cloudflare Dashboard 连接 Git 仓库，设置构建命令: npm run build
+pnpm build
+# 在 Cloudflare Dashboard 连接 Git 仓库，设置构建命令: pnpm build
 ```
 
 ---
@@ -102,7 +102,7 @@ node scripts/init-site.mjs \
 2. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com)
 3. Workers & Pages → Create application → Pages → Connect to Git
 4. 选择仓库，设置：
-   - **Build command**: `npm run build`
+   - **Build command**: `pnpm build`
    - **Build output directory**: `dist`
 5. 添加环境变量（可选）：
    - `NODE_VERSION`: `18`
@@ -111,7 +111,7 @@ node scripts/init-site.mjs \
 ### 方式二：本地打包上传
 
 ```bash
-npm run build
+pnpm build
 # 把 dist/ 文件夹拖到 Cloudflare Pages 的 Direct Upload
 ```
 

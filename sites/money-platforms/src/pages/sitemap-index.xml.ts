@@ -1,23 +1,4 @@
-import { readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// Read site config from astro.config.mjs directly
-function getSiteUrl(): string {
-  try {
-    const configPath = join(__dirname, '../../astro.config.mjs');
-    const configContent = readFileSync(configPath, 'utf-8');
-    // Match: site: 'https://example.com' or site: "https://example.com"
-    const match = configContent.match(/site:\s*['"]([^'"]+)['"]/);
-    if (match) return match[1];
-  } catch (e) {
-    // ignore
-  }
-  return 'http://localhost:4321';
-}
+import { getSiteUrl } from '../config';
 
 export async function GET() {
   const siteUrl = getSiteUrl();

@@ -1,19 +1,14 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import FriendLinks from '../components/FriendLinks.astro';
-import siteConfig from '../config';
+import { BaseLayout, FriendLinks } from '@astro-money-farm/core/components';
+import siteConfig, { getLang, getSiteUrl } from '../config';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
-const friendLinksConfig = siteConfig.friendLinks || {};
 const socialConfig = siteConfig.social || {};
-const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+const lang = getLang();
 const { name } = siteConfig.site || { name: 'FastWeightLoss' };
-
-// Get network sites count
-const networkSites = allPosts
-  .filter(p => p.data.category)
-  .map(p => ({ category: p.data.category, slug: p.slug }));
+const siteUrl = getSiteUrl();
+const contactEmail = socialConfig.email || 'contact@fastweightloss.com';
 
 const stats = {
   articles: allPosts.length,
@@ -35,7 +30,7 @@ const labels = {
     req3: '✅ 活跃更新（至少每月1篇）',
     req4: '✅ 与变现/副业/创业/AI 相关主题优先',
     formatTitle: '交换格式',
-    formatCode: `名称：${name}\n网址：https://your-domain.com\n描述：分享AI变现、副业赚钱、法国创业等实战方法\nLogo：https://your-domain.com/og-default.svg`,
+    formatCode: `名称：${name}\n网址：${siteUrl}\n描述：分享AI变现、副业赚钱、法国创业等实战方法\nLogo：${siteUrl}/og-default.svg`,
     applyCta: '符合要求？联系邮箱：',
     networkTitle: '🌐 站群网络',
     networkDesc: '我们的内容网络覆盖多个细分领域，互相引流，共同增长。',
@@ -56,7 +51,7 @@ const labels = {
     req3: '✅ Active updates (at least 1 article/month)',
     req4: '✅ Topics related to income/AI preferred',
     formatTitle: 'Link Format',
-    formatCode: `Name: ${name}\nURL: https://your-domain.com\nDescription: Sharing practical methods on AI income, side hustles, France business\nLogo: https://your-domain.com/og-default.svg`,
+    formatCode: `Name: ${name}\nURL: ${siteUrl}\nDescription: Sharing practical methods on AI income, side hustles, France business\nLogo: ${siteUrl}/og-default.svg`,
     applyCta: 'Meet the requirements? Contact: ',
     networkTitle: '🌐 Content Network',
     networkDesc: 'Our content network covers multiple specialized areas, mutual promotion, and shared growth.',
@@ -67,7 +62,7 @@ const labels = {
 
 const t = labels[lang] || labels['zh-CN'];
 ---
-<BaseLayout
+<BaseLayout config={siteConfig}
   title={t.title}
   description={t.description}
 >
@@ -107,12 +102,12 @@ const t = labels[lang] || labels['zh-CN'];
           </div>
         </div>
         <div class="apply-cta">
-          <p>{t.applyCta}<a href={`mailto:${socialConfig.email || 'contact@example.com'}`}>{socialConfig.email || 'contact@example.com'}</a></p>
+          <p>{t.applyCta}<a href={`mailto:${contactEmail}`}>{contactEmail}</a></p>
         </div>
       </section>
 
       <section class="friend-links-section">
-        <FriendLinks />
+        <FriendLinks config={siteConfig} />
       </section>
 
       <section class="network-section">
@@ -120,21 +115,22 @@ const t = labels[lang] || labels['zh-CN'];
         <p class="network-desc">{t.networkDesc}</p>
         <div class="network-grid">
           {[...new Set(allPosts.map(p => p.data.category))].map(cat => {
+            const catName = String(cat);
             const catPosts = allPosts.filter(p => p.data.category === cat);
             return (
               <div class="network-item">
                 <div class="network-icon">
-                  {cat === 'AI变现' && '🤖'}
-                  {cat === '副业' && '💰'}
-                  {cat === '干货' && '📚'}
-                  {cat === '法国创业' && '🇫🇷'}
-                  {!['AI变现', '副业', '干货', '法国创业'].includes(cat) && '📌'}
+                  {catName === 'AI变现' && '🤖'}
+                  {catName === '副业' && '💰'}
+                  {catName === '干货' && '📚'}
+                  {catName === '法国创业' && '🇫🇷'}
+                  {!['AI变现', '副业', '干货', '法国创业'].includes(catName) && '📌'}
                 </div>
                 <div class="network-info">
-                  <h3>{cat}</h3>
+                  <h3>{catName}</h3>
                   <p>{catPosts.length} {t.postsCount}</p>
                 </div>
-                <a href={`/blog/category/${cat}`} class="network-link">{t.viewLink}</a>
+                <a href={`/blog/category/${catName}`} class="network-link">{t.viewLink}</a>
               </div>
             );
           })}

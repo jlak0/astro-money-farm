@@ -9,8 +9,6 @@ featured: false
 readingTime: "13分钟"
 ---
 
-# Amazon Associates
-
 ## 平台简介
 
 Amazon Associates是Amazon官方的联盟营销计划，创作者可以通过推广Amazon商品获得佣金。用户在点击你的推广链接后24小时内购买任何Amazon商品，你都能获得佣金。

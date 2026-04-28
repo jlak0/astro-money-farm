@@ -9,8 +9,6 @@ featured: false
 readingTime: "16分钟"
 ---
 
-# Redbubble
-
 ## 平台简介
 
 Redbubble成立于2007年，是全球最大的按需印刷（Print on Demand）平台之一。创作者上传设计，Redbubble负责生产、包装、运输和客服，卖家无需囤货、零库存风险。

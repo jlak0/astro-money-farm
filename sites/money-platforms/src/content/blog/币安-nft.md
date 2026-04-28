@@ -9,8 +9,6 @@ featured: false
 readingTime: "12分钟"
 ---
 
-# 币安 NFT (Binance NFT)
-
 ## 平台简介
 
 币安NFT成立于2021年，是币安交易所旗下的NFT市场。作为全球最大的加密货币交易所之一，币安NFT拥有庞大的用户基础和流动性。

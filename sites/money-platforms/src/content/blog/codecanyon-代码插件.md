@@ -9,8 +9,6 @@ featured: false
 readingTime: "13分钟'"
 ---
 
-# CodeCanyon
-
 ## 平台简介
 
 CodeCanyon是Envato旗下专注于代码和脚本的市场，与ThemeForest（网站模板）同属Envato网络。开发者可以在这里销售WordPress插件、JavaScript库、jQuery插件、移动应用模板等代码产品。

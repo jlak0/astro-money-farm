@@ -9,8 +9,6 @@ featured: false
 readingTime: "15分钟"
 ---
 
-# Medium
-
 ## 平台简介
 
 Medium成立于2012年，由Twitter联合创始人Evan Williams创建。平台专注于深度内容和长篇文章，吸引了全球数百万作者和读者。Medium的独特之处在于它的付费墙机制——通过Partner Program，创作者可以让读者付费阅读部分或全部内容。

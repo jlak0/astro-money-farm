@@ -9,8 +9,6 @@ featured: false
 readingTime: "12分钟"
 ---
 
-# Ghost
-
 ## 平台简介
 
 Ghost成立于2013年，是一个开源的内容平台，专注于Newsletter和会员订阅。与其他平台不同，Ghost是开源软件，你可以部署在自己的服务器上，完全掌控你的数据和内容。

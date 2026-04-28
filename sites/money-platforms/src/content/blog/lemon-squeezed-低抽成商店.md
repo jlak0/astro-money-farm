@@ -9,8 +9,6 @@ featured: false
 readingTime: "12分钟"
 ---
 
-# Lemon Squeezed
-
 ## 平台简介
 
 Lemon Squeezed成立于2020年，是Gumroad的主要竞争对手。平台以更低的抽成比例（仅5-8%）和原生订阅制支持吸引了大量创作者。特别适合数字产品销售和订阅模式运营。

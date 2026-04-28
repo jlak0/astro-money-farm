@@ -9,8 +9,6 @@ featured: false
 readingTime: "16分钟"
 ---
 
-# Printful
-
 ## 平台简介
 
 Printful成立于2013年，是全球领先的按需印刷（POD）平台之一。与Redbubble不同，Printful专注于与外部电商网站集成，提供白标化的生产和物流服务。客户下单后，Printful自动处理生产和配送，让你无需库存。

@@ -13,14 +13,14 @@ echo.
 REM 检查 node_modules
 if not exist "node_modules" (
     echo 📦 正在安装依赖...
-    call npm install
+    call pnpm install
 ) else (
     echo ✅ 依赖已安装
 )
 
 echo.
 echo 🔨 正在构建...
-call npm run build
+call pnpm build
 
 echo.
 echo ✅ 构建完成！
@@ -35,7 +35,7 @@ echo.
 echo 方式二：连接 GitHub
 echo   1. 推送代码到 GitHub
 echo   2. Cloudflare Pages - 新建项目 - 连接 GitHub
-echo   3. 设置构建命令: npm run build
+echo   3. 设置构建命令: pnpm build
 echo   4. 设置输出目录: dist
 echo.
 echo ========================================

@@ -9,8 +9,6 @@ featured: false
 readingTime: "15分钟"
 ---
 
-# Shutterstock
-
 ## 平台简介
 
 Shutterstock成立于2003年，是全球最大的图库平台之一，拥有超过4亿张库存图片和视频。平台连接内容创作者和企业客户，创作者上传素材后，客户下载时创作者获得版税分成。

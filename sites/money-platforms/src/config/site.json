@@ -2,7 +2,7 @@
   "site": {
     "name": "变现学堂",
     "description": "分享实用干货",
-    "url": "https://example.com",
+    "url": "https://moneyplatform.ai",
     "lang": "zh-CN"
   },
   "ads": {
@@ -22,7 +22,7 @@
   "social": {
     "twitter": "",
     "github": "",
-    "email": "contact@example.com"
+    "email": "contact@moneyplatform.ai"
   },
   "analytics": {
     "enabled": false,

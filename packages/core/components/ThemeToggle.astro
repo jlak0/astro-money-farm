@@ -1,7 +1,22 @@
 ---
+import { getLang, type SiteConfig, type SupportedLang } from '../config';
+
+export interface Props {
+  config?: SiteConfig;
+  lang?: SupportedLang;
+}
+
+const { config, lang: langProp } = Astro.props;
+const lang = langProp || (config ? getLang(config) : 'zh-CN');
+const labels = {
+  'zh-CN': { ariaLabel: '切换主题' },
+  'en-US': { ariaLabel: 'Toggle theme' }
+};
+
+const t = labels[lang];
 ---
 
-<button class="theme-toggle" id="theme-toggle" aria-label="切换主题">
+<button class="theme-toggle" id="theme-toggle" aria-label={t.ariaLabel}>
   <span class="icon-sun">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
       <circle cx="12" cy="12" r="5"></circle>

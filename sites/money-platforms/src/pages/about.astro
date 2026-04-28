@@ -1,9 +1,11 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import EmailSubscribe from '../components/EmailSubscribe.astro';
+import { BaseLayout, EmailSubscribe } from '@astro-money-farm/core/components';
+import config from '../config';
+
+const contactEmail = config.social?.email || 'contact@moneyplatform.ai';
 ---
 
-<BaseLayout
+<BaseLayout config={config}
   title="关于站长 | 变现学堂"
   description="了解变现学堂站长的背景和故事"
 >
@@ -73,13 +75,13 @@ import EmailSubscribe from '../components/EmailSubscribe.astro';
             如果你有任何问题、合作建议，或者只是想交个朋友，可以联系我：
           </p>
           <ul class="contact-list">
-            <li>Email：contact@example.com</li>
+            <li>Email：{contactEmail}</li>
             <li>微信公众号：变现学堂</li>
             <li>知乎：变现学堂</li>
           </ul>
         </section>
 
-        <EmailSubscribe />
+        <EmailSubscribe config={config} />
       </div>
     </div>
   </div>

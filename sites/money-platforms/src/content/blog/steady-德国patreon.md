@@ -9,8 +9,6 @@ featured: false
 readingTime: "10分钟'"
 ---
 
-# Steady
-
 ## 平台简介
 
 Steady成立于2016年，是德国领先的创作者订阅平台，被称为"德国版Patreon"。平台服务欧洲市场，帮助创作者建立稳定的订阅收入。

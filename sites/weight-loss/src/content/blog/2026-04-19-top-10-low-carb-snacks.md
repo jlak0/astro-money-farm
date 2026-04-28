@@ -8,8 +8,6 @@ author: "Weight Loss Expert"
 featured: false
 ---
 
-# Top 10 Low Carb Snacks for Weight Loss
-
 ## Best Low Carb Snack Options
 
 1. Hard-boiled eggs

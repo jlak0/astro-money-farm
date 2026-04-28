@@ -144,7 +144,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: pnpm build
         env:
           SITE_URL: ${{ secrets.SITE_URL }}
 
@@ -273,7 +273,7 @@ node scripts/generate-favicon.mjs --letter A --color "#10b981"
 npm run dev
 
 # 构建生产版本
-npm run build
+pnpm build
 
 # 预览（带搜索索引）
 npm run preview

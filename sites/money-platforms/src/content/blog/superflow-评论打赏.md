@@ -9,8 +9,6 @@ featured: false
 readingTime: "9分钟'"
 ---
 
-# Superflow
-
 ## 平台简介
 
 Superflow（原名Superchat）是一个让YouTube创作者在YouTube评论区接收粉丝打赏的工具。粉丝可以在YouTube直播或视频评论区直接打赏创作者。

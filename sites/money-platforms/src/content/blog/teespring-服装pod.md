@@ -9,8 +9,6 @@ featured: false
 readingTime: "12分钟"
 ---
 
-# Teespring
-
 ## 平台简介
 
 Teespring成立于2011年，是专注于服装类按需印刷的平台。与Redbubble不同，Teespring主要面向内容创作者，允许他们在YouTube、Twitter等平台推广自己的服装品牌。

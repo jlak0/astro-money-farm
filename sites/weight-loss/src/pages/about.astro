@@ -1,11 +1,11 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import EmailSubscribe from '../components/EmailSubscribe.astro';
-import config from '../config';
+import { BaseLayout, EmailSubscribe } from '@astro-money-farm/core/components';
+import config, { getLang } from '../config';
 
 const siteConfig = config as any;
-const lang = siteConfig.site?.lang || siteConfig.language || 'zh-CN';
+const lang = getLang();
 const { name } = siteConfig.site || { name: 'FastWeightLoss' };
+const contactEmail = siteConfig.social?.email || 'contact@fastweightloss.com';
 
 const labels = {
   'zh-CN': {
@@ -29,7 +29,7 @@ const labels = {
     section3Year2023: '移居法国，开始国际化业务探索',
     section4Title: '联系我',
     section4Intro: '如果你有任何问题、合作建议，或者只是想交个朋友，可以联系我：',
-    contactEmail: 'Email：contact@example.com',
+    contactEmailLabel: 'Email：',
     contactWechat: '微信公众号：变现学堂',
     contactZhihu: '知乎：变现学堂'
   },
@@ -54,7 +54,7 @@ const labels = {
     section3Year2023: 'Moved to France, started exploring international business',
     section4Title: 'Contact Me',
     section4Intro: 'If you have any questions, partnership suggestions, or just want to make friends, feel free to contact me:',
-    contactEmail: 'Email: contact@example.com',
+    contactEmailLabel: 'Email: ',
     contactWechat: 'WeChat: FastWeightLoss',
     contactZhihu: 'Zhihu: FastWeightLoss'
   }
@@ -63,7 +63,7 @@ const labels = {
 const t = labels[lang] || labels['zh-CN'];
 ---
 
-<BaseLayout
+<BaseLayout config={config}
   title={t.title}
   description={t.description}
 >
@@ -123,13 +123,13 @@ const t = labels[lang] || labels['zh-CN'];
           <h2>{t.section4Title}</h2>
           <p>{t.section4Intro}</p>
           <ul class="contact-list">
-            <li>{t.contactEmail}</li>
+            <li>{t.contactEmailLabel}{contactEmail}</li>
             <li>{t.contactWechat}</li>
             <li>{t.contactZhihu}</li>
           </ul>
         </section>
 
-        <EmailSubscribe />
+        <EmailSubscribe config={config} />
       </div>
     </div>
   </div>

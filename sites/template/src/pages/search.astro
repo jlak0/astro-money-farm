@@ -1,8 +1,9 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import { BaseLayout } from '@astro-money-farm/core/components';
+import siteConfig from '../config';
 ---
 
-<BaseLayout
+<BaseLayout config={siteConfig}
   title="搜索 | 变现学堂"
   description="搜索博客文章，探索AI变现、副业、法国创业等实用干货。"
 >

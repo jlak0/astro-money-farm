@@ -1,21 +1,33 @@
 ---
-import config from '../config';
+import defaultConfig, { getLang, type FriendLinkGroup, type FriendLinkSite, type SiteConfig } from '../config';
 
-const friendLinksConfig = config.friendLinks || {};
+export interface Props {
+  config?: SiteConfig;
+}
+
+const { config = defaultConfig } = Astro.props;
+const friendLinksConfig = config.friendLinks || config.links?.friendlyLinks || {};
 const friendLinksEnabled = friendLinksConfig.enabled ?? true;
 const groups = friendLinksConfig.groups || [];
 const openInNewTab = friendLinksConfig.openInNewTab ?? true;
-const enabledGroups = groups.filter((g: any) => g.sites && g.sites.length > 0);
+const enabledGroups = groups.filter((group: FriendLinkGroup) => group.sites && group.sites.length > 0);
+const lang = getLang(config);
+const labels = {
+  'zh-CN': { title: '🏠 优秀站点' },
+  'en-US': { title: '🏠 Featured Sites' }
+};
+
+const t = labels[lang];
 ---
 
 {friendLinksEnabled && enabledGroups.length > 0 && (
   <section class="friend-links">
-    <h2 class="section-title">🏠 优秀站点</h2>
+    <h2 class="section-title">{t.title}</h2>
     {enabledGroups.map(group => (
       <div class="link-group">
         <h3 class="group-title">{group.name}</h3>
         <div class="links-grid">
-          {group.sites.map(site => (
+          {group.sites.map((site: FriendLinkSite) => (
             <a
               href={site.url}
               class="friend-link-item"

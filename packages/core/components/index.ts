@@ -11,3 +11,5 @@ export { default as AffiliateLink } from './AffiliateLink.astro';
 export { default as InternalLinks } from './InternalLinks.astro';
 export { default as FriendLinks } from './FriendLinks.astro';
 export { default as EmailSubscribe } from './EmailSubscribe.astro';
+export { default as BaseLayout } from './BaseLayout.astro';
+export { default as BlogPostLayout } from './BlogPostLayout.astro';

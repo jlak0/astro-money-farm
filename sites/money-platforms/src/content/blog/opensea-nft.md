@@ -9,8 +9,6 @@ featured: false
 readingTime: "13分钟"
 ---
 
-# OpenSea
-
 ## 平台简介
 
 OpenSea成立于2017年，是全球最大的NFT交易平台，支持以太坊、Polygon、Solana等多条区块链。平台拥有最大的NFT用户群体和流动性。

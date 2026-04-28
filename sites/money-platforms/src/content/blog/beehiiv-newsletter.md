@@ -9,8 +9,6 @@ featured: false
 readingTime: "11分钟"
 ---
 
-# Beehiiv
-
 ## 平台简介
 
 Beehiiv成立于2020年，是相对较新的Newsletter平台，但增长迅速。平台以现代化的界面、强大的分析工具和"Launch"功能著称，帮助创作者快速启动和增长Newsletter。

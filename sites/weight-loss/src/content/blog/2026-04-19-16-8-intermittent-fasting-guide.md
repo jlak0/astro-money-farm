@@ -8,8 +8,6 @@ author: "Weight Loss Expert"
 featured: true
 ---
 
-# 16:8 Intermittent Fasting - Complete Beginner's Guide
-
 ## What is 16:8 Intermittent Fasting?
 
 The 16:8 method is one of the most popular forms of intermittent fasting. You fast for 16 hours and eat within an 8-hour window.

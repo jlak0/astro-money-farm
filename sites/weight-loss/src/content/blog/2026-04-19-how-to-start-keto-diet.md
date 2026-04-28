@@ -8,8 +8,6 @@ author: "Weight Loss Expert"
 featured: true
 ---
 
-# How to Start Keto Diet: 7 Day Meal Plan
-
 ## What is the Keto Diet?
 
 The ketogenic diet is a low-carb, high-fat diet that puts your body into ketosis - a state where it burns fat for fuel instead of carbohydrates.

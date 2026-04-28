@@ -1,6 +1,7 @@
 ---
+import { BlogPostLayout } from '@astro-money-farm/core/components';
+import siteConfig from '../../config';
 import { getCollection } from 'astro:content';
-import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -13,4 +14,4 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 ---
 
-<BlogPostLayout post={post} />
+<BlogPostLayout config={siteConfig} post={post} />

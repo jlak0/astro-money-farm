@@ -9,8 +9,6 @@ featured: false
 readingTime: "16分钟"
 ---
 
-# Etsy
-
 ## 平台简介
 
 Etsy成立于2005年，是以手工艺品、复古物品和创意产品闻名的电商平台。与Amazon、淘宝等大众平台不同，Etsy专注于独特、手工制作或 vintage 商品，拥有忠实的买家群体。

@@ -1,9 +1,7 @@
 ---
+import { AdBanner, BaseLayout, BlogCard, EmailSubscribe } from '@astro-money-farm/core/components';
+import siteConfig from '../config';
 import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import BlogCard from '../components/BlogCard.astro';
-import AdBanner from '../components/AdBanner.astro';
-import EmailSubscribe from '../components/EmailSubscribe.astro';
 
 const allPosts = await getCollection('blog');
 const featuredPosts = allPosts
@@ -23,7 +21,7 @@ const categories = [
 ];
 ---
 
-<BaseLayout
+<BaseLayout config={siteConfig}
   title="变现学堂 - SEO流量变现博客 | AI变现·副业·法国创业"
   description="分享AI变现、副业赚钱、法国创业等干货内容,助你实现财务自由"
 >
@@ -46,7 +44,7 @@ const categories = [
   </section>
 
   <!-- 顶部广告 -->
-  <AdBanner position="top" />
+  <AdBanner config={siteConfig} position="top" />
 
   <!-- Featured Posts -->
   <section class="featured-section">
@@ -54,7 +52,7 @@ const categories = [
       <h2 class="section-title">精选文章</h2>
       <div class="featured-grid">
         {featuredPosts.map(post => (
-          <BlogCard post={post} />
+          <BlogCard config={siteConfig} post={post} />
         ))}
       </div>
     </div>
@@ -79,7 +77,7 @@ const categories = [
   <!-- Email Subscribe -->
   <section class="subscribe-section">
     <div class="container">
-      <EmailSubscribe />
+      <EmailSubscribe config={siteConfig} />
     </div>
   </section>
 
@@ -92,14 +90,14 @@ const categories = [
       </div>
       <div class="posts-grid">
         {recentPosts.map(post => (
-          <BlogCard post={post} />
+          <BlogCard config={siteConfig} post={post} />
         ))}
       </div>
     </div>
   </section>
 
   <!-- 底部广告 -->
-  <AdBanner position="inline" />
+  <AdBanner config={siteConfig} position="inline" />
 </BaseLayout>
 
 <style>

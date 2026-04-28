@@ -1,20 +1,35 @@
 ---
-import config from '../config';
+import defaultConfig, { getLang, type SiteConfig } from '../config';
 
 export interface Props {
   href: string;
   title: string;
   description?: string;
   platform?: string;
+  config?: SiteConfig;
 }
 
-const { href, title, description, platform = '推广' } = Astro.props;
+const { href, title, description, platform, config = defaultConfig } = Astro.props;
 const affiliateEnabled = config.affiliate?.enabled ?? false;
+const lang = getLang(config);
+const labels = {
+  'zh-CN': {
+    defaultPlatform: '推广',
+    disclaimer: '*此链接为联盟链接,我们可能会获得一定佣金'
+  },
+  'en-US': {
+    defaultPlatform: 'Sponsored',
+    disclaimer: '*This is an affiliate link. We may earn a commission.'
+  }
+};
+
+const t = labels[lang];
+const platformLabel = platform || t.defaultPlatform;
 ---
 
 {affiliateEnabled && (
   <div class="affiliate-link-card">
-  <div class="affiliate-badge">{platform}</div>
+  <div class="affiliate-badge">{platformLabel}</div>
   <a href={href} class="affiliate-link" target="_blank" rel="noopener sponsored">
     <div class="affiliate-content">
       <h4 class="affiliate-title">{title}</h4>
@@ -25,7 +40,7 @@ const affiliateEnabled = config.affiliate?.enabled ?? false;
       <polyline points="12 5 19 12 12 19"></polyline>
     </svg>
   </a>
-  <p class="affiliate-disclaimer">*此链接为联盟链接,我们可能会获得一定佣金</p>
+  <p class="affiliate-disclaimer">{t.disclaimer}</p>
   </div>
 )}
 

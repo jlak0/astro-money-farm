@@ -1,11 +1,31 @@
 ---
-import config from '../config';
+import defaultConfig, { getLang, type SiteConfig } from '../config';
 
 export interface Props {
   position: 'top' | 'inline' | 'sidebar';
+  config?: SiteConfig;
 }
 
-const { position } = Astro.props;
+const { position, config = defaultConfig } = Astro.props;
+const lang = getLang(config);
+const labels = {
+  'zh-CN': {
+    ariaLabel: '广告',
+    label: '广告',
+    topPlaceholder: '顶部横幅广告位 (728x90)',
+    inlinePlaceholder: '文中广告位',
+    sidebarPlaceholder: '侧边栏广告位 (300x250)'
+  },
+  'en-US': {
+    ariaLabel: 'Advertisement',
+    label: 'Ad',
+    topPlaceholder: 'Top Banner Ad (728x90)',
+    inlinePlaceholder: 'In-Article Ad',
+    sidebarPlaceholder: 'Sidebar Ad (300x250)'
+  }
+};
+
+const t = labels[lang];
 
 // Check if this ad position is enabled
 const adEnabled = config.ads?.enabled && config.ads?.placements?.[position];
@@ -14,7 +34,7 @@ const adEnabled = config.ads?.enabled && config.ads?.placements?.[position];
 {adEnabled ? (
   <div class={`ad-banner ad-${position}`} data-position={position}>
     <div class="ad-container">
-      <span class="ad-label">广告</span>
+      <span class="ad-label" aria-label={t.ariaLabel}>{t.label}</span>
       <div class="ad-content">
         {config.ads?.google?.enabled && config.ads?.google?.clientId ? (
           <ins
@@ -26,9 +46,9 @@ const adEnabled = config.ads?.enabled && config.ads?.placements?.[position];
           />
         ) : (
           <div class="ad-placeholder">
-            {position === 'top' && <span>顶部横幅广告位 (728x90)</span>}
-            {position === 'inline' && <span>文中广告位</span>}
-            {position === 'sidebar' && <span>侧边栏广告位 (300x250)</span>}
+            {position === 'top' && <span>{t.topPlaceholder}</span>}
+            {position === 'inline' && <span>{t.inlinePlaceholder}</span>}
+            {position === 'sidebar' && <span>{t.sidebarPlaceholder}</span>}
           </div>
         )}
       </div>

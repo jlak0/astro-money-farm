@@ -5,6 +5,10 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".astro/**"]
     },
+    "check": {
+      "dependsOn": ["^check"],
+      "outputs": [".astro/**"]
+    },
     "dev": {
       "cache": false,
       "persistent": true

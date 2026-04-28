@@ -8,8 +8,6 @@ author: "Weight Loss Expert"
 featured: false
 ---
 
-# Best Time to Eat for Maximum Fat Burn
-
 ## Morning vs Evening Eating
 
 Research shows that:
