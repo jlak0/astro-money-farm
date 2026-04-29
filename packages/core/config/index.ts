@@ -1,5 +1,7 @@
 import rawConfig from './site.json';
 import rawTheme from './theme.json';
+export type { MultiThemeConfig, SingleThemeConfig, ThemeConfig, ThemePalette };
+import { buildThemeCSS as buildResolvedThemeCSS, resolveTheme, type ThemeConfig } from './theme-utils';
 
 export type SupportedLang = 'zh-CN' | 'en-US';
 
@@ -100,38 +102,6 @@ export interface SiteConfig {
   };
 }
 
-export interface ThemeConfig {
-  name?: string;
-  colors: {
-    light: {
-      primary: string;
-      primaryDark: string;
-      background: string;
-      backgroundSecondary: string;
-      text: string;
-      textSecondary: string;
-      border: string;
-    };
-    dark: {
-      primary: string;
-      primaryDark: string;
-      background: string;
-      backgroundSecondary: string;
-      text: string;
-      textSecondary: string;
-      border: string;
-    };
-  };
-  font: {
-    family: string;
-  };
-  radius: {
-    small: string;
-    medium: string;
-    large: string;
-  };
-}
-
 const config = {
   ...(rawConfig as SiteConfig),
   theme: rawTheme as ThemeConfig
@@ -147,38 +117,10 @@ export function getLang(siteConfig: SiteConfig = config): SupportedLang {
   return lang === 'en-US' || lang === 'en' ? 'en-US' : 'zh-CN';
 }
 
+export { resolveTheme };
+
 export function buildThemeCSS(theme: ThemeConfig = rawTheme as ThemeConfig) {
-  const { colors, font, radius } = theme;
-  const light = colors.light;
-  const dark = colors.dark;
-
-  return `
-:root {
-  --bg-primary: ${light.background};
-  --bg-secondary: ${light.backgroundSecondary};
-  --bg-tertiary: ${light.background};
-  --text-primary: ${light.text};
-  --text-secondary: ${light.textSecondary};
-  --border-color: ${light.border};
-  --accent-color: ${light.primary};
-  --accent-color-dark: ${light.primaryDark};
-  --font-family: ${font.family};
-  --radius-small: ${radius.small};
-  --radius-medium: ${radius.medium};
-  --radius-large: ${radius.large};
-}
-
-.dark {
-  --bg-primary: ${dark.background};
-  --bg-secondary: ${dark.backgroundSecondary};
-  --bg-tertiary: ${dark.background};
-  --text-primary: ${dark.text};
-  --text-secondary: ${dark.textSecondary};
-  --border-color: ${dark.border};
-  --accent-color: ${dark.primary};
-  --accent-color-dark: ${dark.primaryDark};
-}
-`.trim();
+  return buildResolvedThemeCSS(theme);
 }
 
 export default config;

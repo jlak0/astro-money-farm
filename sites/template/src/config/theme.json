@@ -1,31 +1,67 @@
 {
-  "name": "default",
-  "colors": {
-    "light": {
-      "primary": "#10b981",
-      "primaryDark": "#059669",
-      "background": "#ffffff",
-      "backgroundSecondary": "#f8fafc",
-      "text": "#1e293b",
-      "textSecondary": "#64748b",
-      "border": "#e2e8f0"
+  "activeTheme": "evergreen",
+  "themes": {
+    "evergreen": {
+      "name": "evergreen",
+      "colors": {
+        "light": {
+          "primary": "#138f6a",
+          "primaryDark": "#0f6f54",
+          "background": "#fcfdf9",
+          "backgroundSecondary": "#eef5ed",
+          "text": "#17221d",
+          "textSecondary": "#65736c",
+          "border": "#d3dfd7"
+        },
+        "dark": {
+          "primary": "#5eead4",
+          "primaryDark": "#99f6e4",
+          "background": "#0b1412",
+          "backgroundSecondary": "#14211e",
+          "text": "#eff8f4",
+          "textSecondary": "#a3b8b0",
+          "border": "#29423b"
+        }
+      },
+      "font": {
+        "family": "'Source Serif 4', 'Noto Serif SC', ui-serif, Georgia, serif"
+      },
+      "radius": {
+        "small": "4px",
+        "medium": "8px",
+        "large": "16px"
+      }
     },
-    "dark": {
-      "primary": "#10b981",
-      "primaryDark": "#34d399",
-      "background": "#0f172a",
-      "backgroundSecondary": "#1e293b",
-      "text": "#f1f5f9",
-      "textSecondary": "#94a3b8",
-      "border": "#334155"
+    "paper": {
+      "name": "paper",
+      "colors": {
+        "light": {
+          "primary": "#9f5130",
+          "primaryDark": "#7c3f26",
+          "background": "#fffdf8",
+          "backgroundSecondary": "#f1eadf",
+          "text": "#231f1a",
+          "textSecondary": "#6d6256",
+          "border": "#dfd0bd"
+        },
+        "dark": {
+          "primary": "#f0b07a",
+          "primaryDark": "#fed7aa",
+          "background": "#17130f",
+          "backgroundSecondary": "#241d17",
+          "text": "#fbf4ea",
+          "textSecondary": "#c1b3a3",
+          "border": "#4a3a2c"
+        }
+      },
+      "font": {
+        "family": "'Literata', 'Noto Serif SC', ui-serif, Georgia, serif"
+      },
+      "radius": {
+        "small": "2px",
+        "medium": "6px",
+        "large": "12px"
+      }
     }
-  },
-  "font": {
-    "family": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-  },
-  "radius": {
-    "small": "4px",
-    "medium": "8px",
-    "large": "16px"
   }
 }

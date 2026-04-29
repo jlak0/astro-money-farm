@@ -46,9 +46,15 @@ const umamiId = config.analytics?.umami?.id;
           acc[k] = v;
           return acc;
         }, {});
+        const mode = cookies['theme-mode'] || cookies['theme'] || 'system';
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (cookies['theme'] === 'dark' || (!cookies['theme'] && prefersDark)) {
+        const shouldUseDark = mode === 'dark' || (mode === 'system' && prefersDark);
+
+        document.documentElement.dataset.themeMode = mode;
+        if (shouldUseDark) {
           document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
         }
       })();
     </script>

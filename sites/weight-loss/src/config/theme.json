@@ -1,31 +1,67 @@
 {
-  "name": "energy",
-  "colors": {
-    "light": {
-      "primary": "#f97316",
-      "primaryDark": "#ea580c",
-      "background": "#fffbf7",
-      "backgroundSecondary": "#fff7ed",
-      "text": "#1c1917",
-      "textSecondary": "#78716c",
-      "border": "#fed7aa"
+  "activeTheme": "vitality",
+  "themes": {
+    "vitality": {
+      "name": "vitality",
+      "colors": {
+        "light": {
+          "primary": "#dc6b1f",
+          "primaryDark": "#b45309",
+          "background": "#fffaf3",
+          "backgroundSecondary": "#f6eee2",
+          "text": "#241b16",
+          "textSecondary": "#75675d",
+          "border": "#ead4bb"
+        },
+        "dark": {
+          "primary": "#fb923c",
+          "primaryDark": "#fdba74",
+          "background": "#19130f",
+          "backgroundSecondary": "#261b15",
+          "text": "#fff7ed",
+          "textSecondary": "#c9b8a7",
+          "border": "#5a3724"
+        }
+      },
+      "font": {
+        "family": "'Nunito', 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif"
+      },
+      "radius": {
+        "small": "5px",
+        "medium": "10px",
+        "large": "18px"
+      }
     },
-    "dark": {
-      "primary": "#fb923c",
-      "primaryDark": "#fdba74",
-      "background": "#1c1917",
-      "backgroundSecondary": "#292524",
-      "text": "#fafaf9",
-      "textSecondary": "#a8a29e",
-      "border": "#f97316"
+    "garden": {
+      "name": "garden",
+      "colors": {
+        "light": {
+          "primary": "#3f8f5a",
+          "primaryDark": "#2f6f45",
+          "background": "#fbfdf6",
+          "backgroundSecondary": "#edf4df",
+          "text": "#1b2419",
+          "textSecondary": "#65715f",
+          "border": "#d8e2c9"
+        },
+        "dark": {
+          "primary": "#86efac",
+          "primaryDark": "#bbf7d0",
+          "background": "#10170f",
+          "backgroundSecondary": "#182316",
+          "text": "#f2faed",
+          "textSecondary": "#aebfa7",
+          "border": "#30462b"
+        }
+      },
+      "font": {
+        "family": "'Fraunces', 'Noto Sans SC', ui-serif, Georgia, serif"
+      },
+      "radius": {
+        "small": "6px",
+        "medium": "12px",
+        "large": "20px"
+      }
     }
-  },
-  "font": {
-    "family": "'Nunito', -apple-system, sans-serif"
-  },
-  "radius": {
-    "small": "4px",
-    "medium": "8px",
-    "large": "16px"
   }
 }

@@ -9,74 +9,212 @@ export interface Props {
 const { config, lang: langProp } = Astro.props;
 const lang = langProp || (config ? getLang(config) : 'zh-CN');
 const labels = {
-  'zh-CN': { ariaLabel: '切换主题' },
-  'en-US': { ariaLabel: 'Toggle theme' }
+  'zh-CN': {
+    ariaLabel: '主题模式',
+    light: '浅色',
+    dark: '深色',
+    system: '系统'
+  },
+  'en-US': {
+    ariaLabel: 'Theme mode',
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System'
+  }
 };
 
 const t = labels[lang];
+const modes = [
+  { id: 'light', label: t.light },
+  { id: 'dark', label: t.dark },
+  { id: 'system', label: t.system }
+];
 ---
 
-<button class="theme-toggle" id="theme-toggle" aria-label={t.ariaLabel}>
-  <span class="icon-sun">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </span>
-  <span class="icon-moon">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-  </span>
-</button>
+<div class="theme-switch" id="theme-switch" role="group" aria-label={t.ariaLabel}>
+  {modes.map((mode) => (
+    <button
+      class="theme-option"
+      type="button"
+      data-theme-option={mode.id}
+      aria-label={mode.label}
+      aria-pressed="false"
+      title={mode.label}
+    >
+      <span class={`theme-icon icon-${mode.id}`} aria-hidden="true"></span>
+      <span class="theme-label">{mode.label}</span>
+    </button>
+  ))}
+</div>
 
 <style>
-  .theme-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    color: var(--text-primary);
-    transition: background 0.2s;
-    display: flex;
+  .theme-switch {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.1875rem;
+    width: 10.25rem;
+    min-height: 2.35rem;
+    border: 1px solid color-mix(in srgb, var(--border-color) 76%, transparent);
+    border-radius: var(--radius-medium);
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--bg-primary) 88%, transparent), color-mix(in srgb, var(--bg-secondary) 92%, transparent));
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 36%, transparent);
+  }
+
+  .theme-option {
+    position: relative;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.25rem;
+    min-width: 0;
+    height: 1.875rem;
+    padding: 0 0.45rem;
+    border: 0;
+    border-radius: calc(var(--radius-medium) - 3px);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      background-color 0.18s ease,
+      box-shadow 0.18s ease,
+      color 0.18s ease,
+      transform 0.18s ease;
   }
 
-  .theme-toggle:hover {
-    background: var(--bg-secondary);
+  .theme-option:hover {
+    color: var(--text-primary);
+    background: color-mix(in srgb, var(--accent-color) 10%, transparent);
   }
 
-  .icon-sun,
-  .icon-moon {
-    display: none;
+  .theme-option[aria-pressed='true'] {
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    box-shadow:
+      0 8px 18px color-mix(in srgb, var(--accent-color) 12%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--accent-color) 32%, transparent);
+    transform: translateY(-1px);
   }
 
-  /* Light mode: show moon */
-  html:not(.dark) .icon-moon {
-    display: block;
+  .theme-icon {
+    position: relative;
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    flex: 0 0 auto;
   }
 
-  /* Dark mode: show sun */
-  html.dark .icon-sun {
-    display: block;
+  .icon-light {
+    border: 2px solid currentColor;
+    border-radius: 999px;
+    box-shadow:
+      0 -0.35rem 0 -0.22rem currentColor,
+      0 0.35rem 0 -0.22rem currentColor,
+      0.35rem 0 0 -0.22rem currentColor,
+      -0.35rem 0 0 -0.22rem currentColor;
+  }
+
+  .icon-dark {
+    border-radius: 999px;
+    background: currentColor;
+  }
+
+  .icon-dark::after {
+    content: '';
+    position: absolute;
+    inset: -0.08rem -0.2rem 0.08rem 0.2rem;
+    border-radius: inherit;
+    background: var(--bg-primary);
+  }
+
+  .icon-system {
+    border: 1.7px solid currentColor;
+    border-radius: 0.2rem;
+  }
+
+  .icon-system::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -0.25rem;
+    width: 0.5rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    background: currentColor;
+    transform: translateX(-50%);
+  }
+
+  @media (max-width: 520px) {
+    .theme-switch {
+      width: 7.9rem;
+    }
+
+    .theme-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
   }
 </style>
 
 <script>
-  const toggle = document.getElementById('theme-toggle');
+  const switcher = document.getElementById('theme-switch');
   const html = document.documentElement;
+  const options = Array.from(document.querySelectorAll('[data-theme-option]'));
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
 
-  toggle?.addEventListener('click', () => {
-    const isDark = html.classList.toggle('dark');
-    document.cookie = `theme=${isDark ? 'dark' : 'light'};path=/;max-age=31536000;SameSite=Lax`;
+  const readCookie = (name) => {
+    return document.cookie
+      .split(';')
+      .map((item) => item.trim().split('='))
+      .find(([key]) => key === name)?.[1];
+  };
+
+  const setCookie = (name, value) => {
+    document.cookie = `${name}=${value};path=/;max-age=31536000;SameSite=Lax`;
+  };
+
+  const applyThemeMode = (mode) => {
+    const normalizedMode = ['light', 'dark', 'system'].includes(mode) ? mode : 'system';
+    const shouldUseDark = normalizedMode === 'dark' || (normalizedMode === 'system' && media.matches);
+
+    html.classList.toggle('dark', shouldUseDark);
+    html.dataset.themeMode = normalizedMode;
+    options.forEach((option) => {
+      option.setAttribute('aria-pressed', String(option.dataset.themeOption === normalizedMode));
+    });
+  };
+
+  const initialMode = readCookie('theme-mode') || readCookie('theme') || 'system';
+  applyThemeMode(initialMode);
+
+  switcher?.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const button = target.closest('[data-theme-option]');
+    if (!(button instanceof HTMLElement)) return;
+
+    const mode = button.dataset.themeOption;
+    setCookie('theme-mode', mode);
+    applyThemeMode(mode);
+  });
+
+  media.addEventListener('change', () => {
+    if ((html.dataset.themeMode || 'system') === 'system') {
+      applyThemeMode('system');
+    }
   });
 </script>
