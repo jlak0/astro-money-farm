@@ -1,4 +1,4 @@
-import { createSitemapGET } from '@astro-money-farm/core/routes';
+import { createPagesSitemapGET } from '@astro-money-farm/core/routes';
 import { getSiteUrl } from '../config';
 
-export const GET = createSitemapGET(getSiteUrl);
+export const GET = createPagesSitemapGET(getSiteUrl);
