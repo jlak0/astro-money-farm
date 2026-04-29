@@ -53,3 +53,10 @@ test('create-site copies template files without generated artifacts', () => {
     rmSync(fixtureRoot, { recursive: true, force: true });
   }
 });
+
+test('deploy-site accepts explicit pages project name', () => {
+  const source = readFileSync(join(repoRoot, 'scripts', 'deploy-site.sh'), 'utf8');
+
+  assert.match(source, /PAGES_PROJECT=\$\{3:-\$\{PAGES_PROJECT_NAME:-\$SITE_NAME\}\}/);
+  assert.match(source, /--project-name="\$PAGES_PROJECT"/);
+});
