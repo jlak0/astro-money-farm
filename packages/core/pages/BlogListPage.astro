@@ -19,10 +19,12 @@ const {
   categories: providedCategories,
   visibleTags: providedVisibleTags
 } = Astro.props;
+const hasPaginatedInputs =
+  providedPosts !== undefined && providedPagination !== undefined;
 const fallbackProps =
-  providedPosts === undefined && providedPagination === undefined
-    ? await getBlogIndexPageProps()
-    : undefined;
+  hasPaginatedInputs
+    ? undefined
+    : await getBlogIndexPageProps();
 const posts = providedPosts ?? fallbackProps?.posts ?? [];
 const pagination = providedPagination ?? fallbackProps?.pagination;
 const categories = providedCategories ?? fallbackProps?.categories ?? [];
