@@ -56,6 +56,10 @@ test('shardItems splits lists by configured shard size', () => {
   ]);
 });
 
+test('shardItems returns a single empty shard for empty lists', () => {
+  assert.deepEqual(shardItems([], 2), [{ page: 1, items: [] }]);
+});
+
 test('default constants match approved scale design', () => {
   assert.equal(DEFAULT_PAGINATION.postsPerPage, 24);
   assert.equal(DEFAULT_PAGINATION.visibleTagsLimit, 80);

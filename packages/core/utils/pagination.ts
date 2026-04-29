@@ -20,7 +20,7 @@ export interface PaginationMeta {
   nextUrl: string | null;
 }
 
-export interface PaginatedItems<T> {
+export interface PaginatedResult<T> {
   items: T[];
   pagination: PaginationMeta;
 }
@@ -36,12 +36,12 @@ export interface TagCount {
   count: number;
 }
 
-export interface ItemShard<T> {
+export interface Shard<T> {
   page: number;
   items: T[];
 }
 
-function normalizeBasePath(basePath: string) {
+export function normalizeBasePath(basePath: string) {
   return basePath.replace(/\/+$/, '') || '/';
 }
 
@@ -59,7 +59,7 @@ export function buildPageUrl(basePath: string, page: number) {
 export function paginateItems<T>(
   items: T[],
   options: PaginationOptions
-): PaginatedItems<T> {
+): PaginatedResult<T> {
   const totalItems = items.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / options.pageSize));
   const start = (options.currentPage - 1) * options.pageSize;
@@ -106,7 +106,11 @@ export function countTags(posts: TaggedPost[], limit = DEFAULT_PAGINATION.visibl
 }
 
 export function shardItems<T>(items: T[], shardSize: number) {
-  const shards: ItemShard<T>[] = [];
+  if (items.length === 0) {
+    return [{ page: 1, items: [] }];
+  }
+
+  const shards: Shard<T>[] = [];
 
   for (let index = 0; index < items.length; index += shardSize) {
     shards.push({
