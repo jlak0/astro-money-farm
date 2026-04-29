@@ -2,7 +2,7 @@
 # 用法: ./scripts/deploy-site.sh <站点目录> [环境] [pages项目名]
 # 示例: ./scripts/deploy-site.sh test-site production my-pages-project
 
-if [ -z "$1" ]; then
+if [ -z "${1:-}" ]; then
   echo "用法: ./scripts/deploy-site.sh <站点目录> [环境] [pages项目名]"
   exit 1
 fi
