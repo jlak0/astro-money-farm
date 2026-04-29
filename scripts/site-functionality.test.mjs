@@ -81,6 +81,61 @@ test('money-platforms built pages do not link to missing internal routes', () =>
   assert.deepEqual(missing, []);
 });
 
+test('money-platforms blog archive paginates rendered post cards', () => {
+  assert.ok(
+    existsSync(moneyPlatformsDist),
+    'Run pnpm --filter @astro-money-farm/money-platforms build before this test'
+  );
+
+  const blogDir = join(moneyPlatformsDist, 'blog');
+  const blogIndex = readFileSync(join(blogDir, 'index.html'), 'utf8');
+  const articlePageCount = readdirSync(blogDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .filter((entry) => !['category', 'tag', 'page'].includes(entry.name))
+    .length;
+  const renderedCardCount = blogIndex.match(/\bblog-card\b/g)?.length ?? 0;
+
+  assert.ok(
+    articlePageCount > 24,
+    `Expected fixture to include more than 24 article pages, found ${articlePageCount}`
+  );
+  assert.ok(
+    renderedCardCount <= 24,
+    `Expected blog index to render at most 24 cards, found ${renderedCardCount}`
+  );
+  assert.match(blogIndex, /href=["']\/blog\/page\/2\/["']/);
+});
+
+test('money-platforms emits split static sitemaps', () => {
+  assert.ok(
+    existsSync(moneyPlatformsDist),
+    'Run pnpm --filter @astro-money-farm/money-platforms build before this test'
+  );
+
+  const sitemapFiles = [
+    'sitemap-index.xml',
+    'sitemap.xml',
+    'sitemap-pages.xml',
+    'sitemap-posts-1.xml',
+    'sitemap-archives-1.xml'
+  ];
+
+  for (const sitemapFile of sitemapFiles) {
+    assert.ok(
+      existsSync(join(moneyPlatformsDist, sitemapFile)),
+      `Expected ${sitemapFile} to exist`
+    );
+  }
+
+  for (const sitemapFile of ['sitemap-index.xml', 'sitemap.xml']) {
+    const source = readFileSync(join(moneyPlatformsDist, sitemapFile), 'utf8');
+
+    assert.match(source, /\/sitemap-pages\.xml/);
+    assert.match(source, /\/sitemap-posts-1\.xml/);
+    assert.match(source, /\/sitemap-archives-1\.xml/);
+  }
+});
+
 test('search page hydrates q query parameter on load', () => {
   const searchPage = readFileSync(join(root, 'packages', 'core', 'pages', 'SearchPage.astro'), 'utf8');
 
