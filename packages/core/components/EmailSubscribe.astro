@@ -10,15 +10,15 @@ const lang = getLang(config);
 const labels = {
   'zh-CN': {
     title: '订阅获取最新干货',
-    description: '每周3篇深度文章，助你副业赚钱',
+    description: '定期获取最新文章和实用更新',
     placeholder: '输入你的邮箱',
     button: '订阅',
     note: '已订阅 10,000+ 读者 · 随时退订',
     ariaLabel: '邮箱地址'
   },
   'en-US': {
-    title: 'Get Weekly Weight Loss Tips',
-    description: '3 in-depth articles weekly to help you reach your goals',
+    title: 'Get New Articles',
+    description: 'Receive useful updates from this site',
     placeholder: 'Enter your email',
     button: 'Subscribe',
     note: '10,000+ subscribers · Unsubscribe anytime',
@@ -27,15 +27,18 @@ const labels = {
 };
 
 const t = labels[lang];
-const { enabled, title, description, placeholder } = {
+const { enabled, title, description, placeholder, action, method } = {
   enabled: config.subscribe?.enabled ?? true,
   title: config.subscribe?.title || t.title,
   description: config.subscribe?.description || t.description,
-  placeholder: config.subscribe?.placeholder || t.placeholder
+  placeholder: config.subscribe?.placeholder || t.placeholder,
+  action: config.subscribe?.action?.trim(),
+  method: config.subscribe?.method || 'POST'
 };
+const shouldRender = Boolean(enabled && action);
 ---
 
-{enabled && (
+{shouldRender && (
   <section class="email-subscribe">
     <div class="subscribe-container">
       <div class="subscribe-icon">
@@ -46,7 +49,7 @@ const { enabled, title, description, placeholder } = {
       </div>
       <h3 class="subscribe-title">{title}</h3>
       <p class="subscribe-desc">{description}</p>
-      <form class="subscribe-form" action="#" method="POST">
+      <form class="subscribe-form" action={action} method={method}>
         <div class="form-group">
           <input
             type="email"

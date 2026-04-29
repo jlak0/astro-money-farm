@@ -3,12 +3,12 @@ import { AdBanner, BaseLayout, BlogCard } from '../components';
 
 const { config, tag, posts } = Astro.props;
 const lang = config.site?.lang === 'en-US' || config.language === 'en-US' ? 'en-US' : 'zh-CN';
-const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '变现学堂');
+const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '站点');
 const allArticles = lang === 'en-US' ? 'All Articles' : '全部文章';
 const articlesLabel = lang === 'en-US' ? ' articles' : '篇文章';
 const description = lang === 'en-US'
   ? `Browse all articles tagged with #${tag} from ${siteName}.`
-  : `浏览所有包含#${tag}标签的文章，探索AI变现、副业、法国创业等实用干货。`;
+  : `浏览${siteName}中包含#${tag}标签的所有文章。`;
 ---
 
 <BaseLayout config={config} title={`#${tag} | ${siteName}`} description={description}>

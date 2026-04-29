@@ -4,12 +4,12 @@ import { getCollection } from 'astro:content';
 
 const { config } = Astro.props;
 const lang = config.site?.lang === 'en-US' || config.language === 'en-US' ? 'en-US' : 'zh-CN';
-const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '变现学堂');
+const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '站点');
 
 const labels = {
   'zh-CN': {
     title: '全部文章',
-    metaDesc: '浏览博客所有文章，探索AI变现、副业、法国创业等实用干货。',
+    metaDesc: `浏览${siteName}的所有文章。`,
     articles: '篇精选文章',
     categories: '分类',
     tags: '标签'

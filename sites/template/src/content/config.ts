@@ -8,7 +8,7 @@ const blog = defineCollection({
     publishDate: z.coerce.date(),
     modifiedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
-    category: z.enum(['AI变现', '副业', '干货', '法国创业']),
+    category: z.string().min(1),
     author: z.string().default('站长'),
     ogImage: z.string().optional(),
     featured: z.boolean().default(false),

@@ -8,7 +8,7 @@ const blog = defineCollection({
     publishDate: z.coerce.date(),
     modifiedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),
-    category: z.enum(['Intermittent Fasting', 'Keto Diet', 'Low Carb', 'Tips']),
+    category: z.string().min(1),
     author: z.string().default('Weight Loss Expert'),
     ogImage: z.string().optional(),
     featured: z.boolean().default(false),

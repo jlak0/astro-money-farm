@@ -5,6 +5,53 @@
     "url": "https://moneyplatform.ai",
     "lang": "zh-CN"
   },
+  "home": {
+    "heroTitle": "普通人如何实现",
+    "heroHighlight": "财务自由",
+    "heroDescription": "探索AI变现、副业赚钱、法国创业等实战方法.<br />每周更新3篇深度干货,陪你一起成长.",
+    "metaTitle": "变现学堂 - SEO流量变现博客 | AI变现·副业·法国创业",
+    "metaDescription": "分享AI变现、副业赚钱、法国创业等干货内容,助你实现财务自由"
+  },
+  "about": {
+    "title": "关于站长 | 变现学堂",
+    "description": "了解变现学堂站长的背景和故事",
+    "pageTitle": "关于站长",
+    "sections": [
+      {
+        "title": "我是谁",
+        "paragraphs": [
+          "你好！我是变现学堂的站长，一个在互联网行业摸爬滚打8年的老兵。从最初的程序员，到现在的全栈独立开发者，我一直在探索用技术赚钱的方法。",
+          "现在我生活在法国，同时经营着自己的互联网业务。这个博客就是我分享赚钱经验、副业心得和海外创业故事的地方。"
+        ]
+      },
+      {
+        "title": "这个博客",
+        "paragraphs": [
+          "变现学堂成立于2022年，专注于分享："
+        ],
+        "items": [
+          "<strong>AI变现</strong> - 如何用ChatGPT等AI工具实现副业增收",
+          "<strong>副业赚钱</strong> - 适合普通人的副业方向和实操方法",
+          "<strong>法国创业</strong> - 在法国创业、生活的第一手经验",
+          "<strong>干货分享</strong> - 效率工具、赚钱方法、思维提升"
+        ]
+      },
+      {
+        "title": "我的经历",
+        "timeline": [
+          ["2016", "国内互联网公司程序员"],
+          ["2019", "转行产品经理，开始探索副业"],
+          ["2021", "副业收入超过主业，开始独立创业"],
+          ["2022", "创办变现学堂，分享赚钱经验"],
+          ["2023", "移居法国，开始国际化业务探索"]
+        ]
+      }
+    ],
+    "contactTitle": "联系我",
+    "contactIntro": "如果你有任何问题、合作建议，或者只是想交个朋友，可以联系我：",
+    "emailLabel": "Email：",
+    "extraContacts": ["微信公众号：变现学堂", "知乎：变现学堂"]
+  },
   "ads": {
     "enabled": false,
     "placements": {
@@ -34,7 +81,7 @@
     }
   },
   "footer": {
-    "copyright": "© 2026 我的站点. All rights reserved.",
+    "copyright": "",
     "ICP": "",
     "police": ""
   }

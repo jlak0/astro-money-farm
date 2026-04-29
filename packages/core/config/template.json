@@ -30,7 +30,7 @@
   "subscribe": {
     "enabled": true,
     "title": "订阅获取最新干货",
-    "description": "每周3篇深度文章，助你副业赚钱",
+    "description": "定期获取最新文章和实用更新",
     "placeholder": "输入你的邮箱"
   },
   "social": {
@@ -63,7 +63,7 @@
     "friendlyLinks": {
       "groups": [
         {
-          "name": "变现相关",
+          "name": "相关站点",
           "sites": [
             {
               "name": "站点名称",

@@ -19,6 +19,22 @@ export interface FriendLinkGroup {
   sites: FriendLinkSite[];
 }
 
+export interface CategoryLinkConfig {
+  name: string;
+  slug?: string;
+  description?: string;
+  icon?: string;
+}
+
+export type CategoryConfigEntry = string | CategoryLinkConfig;
+
+export interface AboutSectionConfig {
+  title: string;
+  paragraphs?: string[];
+  items?: string[];
+  timeline?: Array<[string, string]>;
+}
+
 export interface SiteConfig {
   site: {
     name: string;
@@ -28,6 +44,29 @@ export interface SiteConfig {
   };
   language?: string;
   theme?: ThemeConfig;
+  home?: {
+    heroTitle?: string;
+    heroHighlight?: string;
+    heroDescription?: string;
+    primaryCta?: string;
+    secondaryCta?: string;
+    featuredTitle?: string;
+    categoriesTitle?: string;
+    latestTitle?: string;
+    viewAllLabel?: string;
+    metaTitle?: string;
+    metaDescription?: string;
+  };
+  about?: {
+    title?: string;
+    description?: string;
+    pageTitle?: string;
+    sections?: AboutSectionConfig[];
+    contactTitle?: string;
+    contactIntro?: string;
+    emailLabel?: string;
+    extraContacts?: string[];
+  };
   ads?: {
     enabled: boolean;
     placements?: Record<'top' | 'inline' | 'sidebar', boolean>;
@@ -49,7 +88,11 @@ export interface SiteConfig {
     title: string;
     description: string;
     placeholder: string;
+    action?: string;
+    method?: 'GET' | 'POST';
   };
+  featuredCategories?: CategoryConfigEntry[];
+  categoryMeta?: Record<string, Omit<CategoryLinkConfig, 'name'>>;
   social?: {
     twitter?: string;
     github?: string;
@@ -99,6 +142,7 @@ export interface SiteConfig {
     copyright: string;
     ICP?: string;
     police?: string;
+    categories?: CategoryConfigEntry[];
   };
 }
 
