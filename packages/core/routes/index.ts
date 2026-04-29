@@ -15,6 +15,10 @@ interface SitemapUrl {
 
 type BlogPost = Awaited<ReturnType<typeof getCollection<'blog'>>>[number];
 
+let blogPostsPromise: Promise<BlogPost[]> | undefined;
+const postShardCache = new Map<number, Promise<Array<{ page: number; items: BlogPost[] }>>>();
+const archivePathShardCache = new Map<number, Promise<Array<{ page: number; items: string[] }>>>();
+
 function xmlResponse(body: string) {
   return new Response(body, {
     headers: { 'Content-Type': 'application/xml' },
@@ -71,7 +75,7 @@ function sortPosts(posts: BlogPost[]) {
 }
 
 function getPostSitemapUrls(posts: BlogPost[], siteUrl: string): SitemapUrl[] {
-  return sortPosts(posts).map(post => ({
+  return posts.map(post => ({
     loc: `${siteUrl}/blog/${post.slug}`,
     lastmod: formatDate(post.data.modifiedDate || post.data.publishDate),
     changefreq: 'weekly',
@@ -113,10 +117,10 @@ function getArchiveSitemapPaths(posts: BlogPost[]) {
   return paths;
 }
 
-function getArchiveSitemapUrls(posts: BlogPost[], siteUrl: string): SitemapUrl[] {
+function getArchiveSitemapUrls(paths: string[], siteUrl: string): SitemapUrl[] {
   const today = formatDate(new Date());
 
-  return getArchiveSitemapPaths(posts).map(path => ({
+  return paths.map(path => ({
     loc: `${siteUrl}${path}`,
     lastmod: today,
     changefreq: path.startsWith('/blog/tag/') ? 'weekly' : 'daily',
@@ -130,7 +134,30 @@ function getArchiveSitemapUrls(posts: BlogPost[], siteUrl: string): SitemapUrl[]
 }
 
 async function getBlogPosts() {
-  return getCollection('blog');
+  blogPostsPromise ||= getCollection('blog');
+  return blogPostsPromise;
+}
+
+async function getPostSitemapShards(urlsPerFile: number) {
+  if (!postShardCache.has(urlsPerFile)) {
+    postShardCache.set(
+      urlsPerFile,
+      getBlogPosts().then(posts => shardItems(sortPosts(posts), urlsPerFile))
+    );
+  }
+
+  return postShardCache.get(urlsPerFile)!;
+}
+
+async function getArchivePathSitemapShards(urlsPerFile: number) {
+  if (!archivePathShardCache.has(urlsPerFile)) {
+    archivePathShardCache.set(
+      urlsPerFile,
+      getBlogPosts().then(posts => shardItems(getArchiveSitemapPaths(posts), urlsPerFile))
+    );
+  }
+
+  return archivePathShardCache.get(urlsPerFile)!;
 }
 
 export function createRobotsGET(getSiteUrl: () => string): APIRoute {
@@ -153,11 +180,10 @@ export function createSitemapIndexGET(
 ): APIRoute {
   return async () => {
     const siteUrl = getSiteUrl();
-    const posts = await getBlogPosts();
     const urlsPerFile = getUrlsPerFile(options);
     const lastmod = formatDate(new Date());
-    const postShards = shardItems(posts, urlsPerFile);
-    const archiveShards = shardItems(getArchiveSitemapPaths(posts), urlsPerFile);
+    const postShards = await getPostSitemapShards(urlsPerFile);
+    const archiveShards = await getArchivePathSitemapShards(urlsPerFile);
     const sitemapUrls = [
       `${siteUrl}/sitemap-pages.xml`,
       ...postShards.map(shard => `${siteUrl}/sitemap-posts-${shard.page}.xml`),
@@ -184,10 +210,10 @@ export function createPagesSitemapGET(getSiteUrl: () => string): APIRoute {
 }
 
 export async function getPostSitemapStaticPaths(options: SitemapOptions = {}) {
-  const posts = await getBlogPosts();
   const urlsPerFile = getUrlsPerFile(options);
+  const shards = await getPostSitemapShards(urlsPerFile);
 
-  return shardItems(posts, urlsPerFile).map(shard => ({
+  return shards.map(shard => ({
     params: { page: String(shard.page) },
     props: { page: shard.page }
   }));
@@ -199,21 +225,21 @@ export function createPostSitemapGET(
 ): APIRoute {
   return async ({ props }) => {
     const siteUrl = getSiteUrl();
-    const posts = await getBlogPosts();
     const urlsPerFile = getUrlsPerFile(options);
     const page = Number(props.page || 1);
-    const shard = shardItems(getPostSitemapUrls(posts, siteUrl), urlsPerFile)
-      .find(item => item.page === page);
+    const postShards = await getPostSitemapShards(urlsPerFile);
+    const shard = postShards.find(item => item.page === page);
+    const urls = shard ? getPostSitemapUrls(shard.items, siteUrl) : [];
 
-    return xmlResponse(sitemapXml(shard?.items || []));
+    return xmlResponse(sitemapXml(urls));
   };
 }
 
 export async function getArchiveSitemapStaticPaths(options: SitemapOptions = {}) {
-  const posts = await getBlogPosts();
   const urlsPerFile = getUrlsPerFile(options);
+  const shards = await getArchivePathSitemapShards(urlsPerFile);
 
-  return shardItems(getArchiveSitemapPaths(posts), urlsPerFile).map(shard => ({
+  return shards.map(shard => ({
     params: { page: String(shard.page) },
     props: { page: shard.page }
   }));
@@ -225,17 +251,17 @@ export function createArchiveSitemapGET(
 ): APIRoute {
   return async ({ props }) => {
     const siteUrl = getSiteUrl();
-    const posts = await getBlogPosts();
     const urlsPerFile = getUrlsPerFile(options);
     const page = Number(props.page || 1);
-    const shard = shardItems(getArchiveSitemapUrls(posts, siteUrl), urlsPerFile)
-      .find(item => item.page === page);
+    const archiveShards = await getArchivePathSitemapShards(urlsPerFile);
+    const shard = archiveShards.find(item => item.page === page);
+    const urls = shard ? getArchiveSitemapUrls(shard.items, siteUrl) : [];
 
-    return xmlResponse(sitemapXml(shard?.items || []));
+    return xmlResponse(sitemapXml(urls));
   };
 }
 
-export const createSitemapGET = createPagesSitemapGET;
+export const createSitemapGET = createSitemapIndexGET;
 
 export function createSearchIndexGET(): APIRoute {
   return async () => {
