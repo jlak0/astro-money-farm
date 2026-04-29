@@ -1,0 +1,56 @@
+---
+import { AdBanner, BaseLayout, BlogCard } from '../components';
+
+const { config, category, posts } = Astro.props;
+const lang = config.site?.lang === 'en-US' || config.language === 'en-US' ? 'en-US' : 'zh-CN';
+const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '变现学堂');
+const allArticles = lang === 'en-US' ? 'All Articles' : '全部文章';
+const articlesLabel = lang === 'en-US' ? ' articles' : '篇文章';
+const description = lang === 'en-US'
+  ? `Browse all articles about ${category} from ${siteName}.`
+  : `浏览所有${category}分类的文章，探索AI变现、副业、法国创业等实用干货。`;
+---
+
+<BaseLayout config={config} title={`${category} | ${siteName}`} description={description}>
+  <div class="blog-page">
+    <header class="page-header">
+      <div class="container">
+        <nav class="breadcrumb">
+          <a href="/blog">{allArticles}</a>
+          <span class="separator">›</span>
+          <span class="current">{category}</span>
+        </nav>
+        <h1 class="page-title">{category}</h1>
+        <p class="page-desc">{posts.length}{articlesLabel}</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <main class="posts-section">
+        <AdBanner config={config} position="top" />
+        <div class="posts-grid">
+          {posts.map(post => <BlogCard config={config} post={post} />)}
+        </div>
+        <AdBanner config={config} position="inline" />
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-page { padding-bottom: 4rem; }
+  .page-header { background: var(--bg-secondary); padding: 3rem 0; margin-bottom: 2rem; }
+  .breadcrumb { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
+  .breadcrumb a { color: var(--accent-color); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .separator { margin: 0 0.5rem; }
+  .current { color: var(--text-primary); }
+  .page-title { font-size: 2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem; }
+  .page-desc { font-size: 1rem; color: var(--text-secondary); margin: 0; }
+  .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  @media (max-width: 1024px) { .posts-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) {
+    .page-title { font-size: 1.5rem; }
+    .posts-grid { grid-template-columns: 1fr; }
+  }
+</style>

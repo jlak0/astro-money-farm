@@ -6,6 +6,8 @@
   "exports": {
     "./components": "./components/index.ts",
     "./layouts": "./layouts/index.ts",
+    "./pages": "./pages/index.ts",
+    "./routes": "./routes/index.ts",
     "./config": "./config/index.ts",
     "./utils": "./utils/index.ts",
     "./styles": "./styles/global.css",

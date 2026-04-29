@@ -1,0 +1,188 @@
+---
+import { AdBanner, BaseLayout, BlogCard, EmailSubscribe } from '../components';
+import { getCollection } from 'astro:content';
+
+const { config } = Astro.props;
+const lang = config.site?.lang === 'en-US' || config.language === 'en-US' ? 'en-US' : 'zh-CN';
+const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '变现学堂');
+
+const labels = {
+  'zh-CN': {
+    heroTitle1: '普通人如何实现',
+    heroTitle2: '财务自由',
+    heroDesc: '探索AI变现、副业赚钱、法国创业等实战方法.<br />每周更新3篇深度干货,陪你一起成长.',
+    startReading: '开始阅读',
+    exploreCategories: '探索分类',
+    featured: '精选文章',
+    categories: '探索分类',
+    latestPosts: '最新文章',
+    viewAll: '查看全部 →',
+    metaTitle: `${siteName} - SEO流量变现博客 | AI变现·副业·法国创业`,
+    metaDesc: '分享AI变现、副业赚钱、法国创业等干货内容,助你实现财务自由',
+    categoriesList: [
+      { name: 'AI变现', slug: 'AI变现', desc: 'AI工具与变现方法', icon: '🤖' },
+      { name: '副业', slug: '副业', desc: '兼职与副业赚钱', icon: '💼' },
+      { name: '干货', slug: '干货', desc: '实用技巧与教程', icon: '📚' },
+      { name: '法国创业', slug: '法国创业', desc: '海外创业指南', icon: '🇫🇷' }
+    ]
+  },
+  'en-US': {
+    heroTitle1: 'How to Achieve',
+    heroTitle2: 'Better Results',
+    heroDesc: `Explore practical guides from ${siteName}.<br />Fresh, focused articles to help you move faster.`,
+    startReading: 'Start Reading',
+    exploreCategories: 'Explore',
+    featured: 'Featured Articles',
+    categories: 'Categories',
+    latestPosts: 'Latest Posts',
+    viewAll: 'View All →',
+    metaTitle: `${siteName} - ${config.site?.description || 'Expert Guides'}`,
+    metaDesc: config.site?.description || `Expert guides from ${siteName}.`,
+    categoriesList: [
+      { name: 'Intermittent Fasting', slug: 'Intermittent Fasting', desc: '16:8, 18:6, OMAD methods', icon: '⏰' },
+      { name: 'Keto Diet', slug: 'Keto Diet', desc: 'Low carb, high fat lifestyle', icon: '🥑' },
+      { name: 'Low Carb', slug: 'Low Carb', desc: 'Simple carb reduction tips', icon: '🥗' },
+      { name: 'Tips', slug: 'Tips', desc: 'Practical advice', icon: '💡' }
+    ]
+  }
+};
+
+const t = labels[lang];
+const allPosts = await getCollection('blog');
+const featuredPosts = allPosts
+  .filter(post => post.data.featured)
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 6);
+
+const recentPosts = allPosts
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .slice(0, 6);
+---
+
+<BaseLayout config={config} title={t.metaTitle} description={t.metaDesc}>
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title">
+        {t.heroTitle1}
+        <span class="highlight">{t.heroTitle2}</span>
+      </h1>
+      <p class="hero-desc" set:html={t.heroDesc} />
+      <div class="hero-cta">
+        <a href="/blog" class="btn-primary">{t.startReading}</a>
+        <a href="#categories" class="btn-secondary">{t.exploreCategories}</a>
+      </div>
+    </div>
+  </section>
+
+  <AdBanner config={config} position="top" />
+
+  <section class="featured-section">
+    <div class="container">
+      <h2 class="section-title">{t.featured}</h2>
+      <div class="featured-grid">
+        {featuredPosts.map(post => <BlogCard config={config} post={post} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="categories-section" id="categories">
+    <div class="container">
+      <h2 class="section-title">{t.categories}</h2>
+      <div class="categories-grid">
+        {t.categoriesList.map(cat => (
+          <a href={`/blog/category/${cat.slug}`} class="category-card">
+            <span class="category-icon">{cat.icon}</span>
+            <h3 class="category-name">{cat.name}</h3>
+            <p class="category-desc">{cat.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="subscribe-section">
+    <div class="container">
+      <EmailSubscribe config={config} />
+    </div>
+  </section>
+
+  <section class="recent-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">{t.latestPosts}</h2>
+        <a href="/blog" class="view-all">{t.viewAll}</a>
+      </div>
+      <div class="posts-grid">
+        {recentPosts.map(post => <BlogCard config={config} post={post} />)}
+      </div>
+    </div>
+  </section>
+
+  <AdBanner config={config} position="inline" />
+</BaseLayout>
+
+<style>
+  .hero { padding: 5rem 0; text-align: center; background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%); }
+  .hero-title { font-size: 3rem; font-weight: 800; color: var(--text-primary); margin: 0 0 1.5rem; line-height: 1.2; }
+  .hero-title .highlight { color: var(--accent-color); }
+  .hero-desc { font-size: 1.25rem; color: var(--text-secondary); margin: 0 0 2rem; line-height: 1.7; }
+  .hero-cta { display: flex; gap: 1rem; justify-content: center; }
+  .btn-primary {
+    padding: 0.875rem 2rem;
+    background: var(--accent-color);
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); text-decoration: none; }
+  .btn-secondary {
+    padding: 0.875rem 2rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-secondary:hover { background: var(--bg-secondary); text-decoration: none; }
+  .featured-section,
+  .recent-section { padding: 4rem 0; }
+  .categories-section { padding: 4rem 0; background: var(--bg-secondary); }
+  .section-title { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2rem; }
+  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+  .view-all { color: var(--accent-color); font-weight: 500; text-decoration: none; }
+  .view-all:hover { text-decoration: underline; }
+  .featured-grid,
+  .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .categories-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+  .category-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .category-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); text-decoration: none; }
+  .category-icon { font-size: 2.5rem; display: block; margin-bottom: 0.75rem; }
+  .category-name { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin: 0 0 0.5rem; }
+  .category-desc { font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
+  @media (max-width: 1024px) {
+    .featured-grid,
+    .posts-grid,
+    .categories-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 3rem 0; }
+    .hero-title { font-size: 2rem; }
+    .hero-desc { font-size: 1rem; }
+    .hero-cta { flex-direction: column; align-items: center; }
+    .featured-grid,
+    .posts-grid,
+    .categories-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,106 @@
+---
+import { AdBanner, BaseLayout, BlogCard } from '../components';
+import { getCollection } from 'astro:content';
+
+const { config } = Astro.props;
+const lang = config.site?.lang === 'en-US' || config.language === 'en-US' ? 'en-US' : 'zh-CN';
+const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '变现学堂');
+
+const labels = {
+  'zh-CN': {
+    title: '全部文章',
+    metaDesc: '浏览博客所有文章，探索AI变现、副业、法国创业等实用干货。',
+    articles: '篇精选文章',
+    categories: '分类',
+    tags: '标签'
+  },
+  'en-US': {
+    title: 'All Articles',
+    metaDesc: `Browse all articles from ${siteName}.`,
+    articles: ' articles',
+    categories: 'Categories',
+    tags: 'Tags'
+  }
+};
+
+const t = labels[lang];
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) =>
+  b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+
+const categories = [...new Set(allPosts.map(p => p.data.category))];
+const tags = [...new Set(allPosts.flatMap(p => p.data.tags || []))];
+---
+
+<BaseLayout config={config} title={`${t.title} | ${siteName}`} description={t.metaDesc}>
+  <div class="blog-page">
+    <header class="page-header">
+      <div class="container">
+        <h1 class="page-title">{t.title}</h1>
+        <p class="page-desc">{sortedPosts.length}{t.articles}</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <aside class="filters">
+        <div class="filter-section">
+          <h3 class="filter-title">{t.categories}</h3>
+          <div class="filter-tags">
+            {categories.map(cat => (
+              <a href={`/blog/category/${cat}`} class="filter-tag">{cat}</a>
+            ))}
+          </div>
+        </div>
+
+        {tags.length > 0 && (
+          <div class="filter-section">
+            <h3 class="filter-title">{t.tags}</h3>
+            <div class="filter-tags">
+              {tags.map(tag => (
+                <a href={`/blog/tag/${tag}`} class="filter-tag">#{tag}</a>
+              ))}
+            </div>
+          </div>
+        )}
+      </aside>
+
+      <main class="posts-section">
+        <AdBanner config={config} position="top" />
+        <div class="posts-grid">
+          {sortedPosts.map(post => <BlogCard config={config} post={post} />)}
+        </div>
+        <AdBanner config={config} position="inline" />
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-page { padding-bottom: 4rem; }
+  .page-header { background: var(--bg-secondary); padding: 3rem 0; margin-bottom: 2rem; }
+  .page-title { font-size: 2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem; }
+  .page-desc { font-size: 1rem; color: var(--text-secondary); margin: 0; }
+  .filters { margin-bottom: 2rem; padding: 1.5rem; background: var(--bg-secondary); border-radius: 0.75rem; }
+  .filter-section { margin-bottom: 1.5rem; }
+  .filter-section:last-child { margin-bottom: 0; }
+  .filter-title { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin: 0 0 0.75rem; }
+  .filter-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .filter-tag {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .filter-tag:hover { border-color: var(--accent-color); color: var(--accent-color); text-decoration: none; }
+  .posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  @media (max-width: 1024px) { .posts-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) {
+    .page-title { font-size: 1.5rem; }
+    .posts-grid { grid-template-columns: 1fr; }
+  }
+</style>
