@@ -25,7 +25,7 @@ export interface PaginatedResult<T> {
   pagination: PaginationMeta;
 }
 
-export interface TaggedPost {
+interface TaggedPost {
   data: {
     tags?: string[];
   };
