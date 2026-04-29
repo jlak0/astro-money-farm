@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import test from 'node:test';
-import { join, relative, sep } from 'node:path';
+import { basename, join, relative, sep } from 'node:path';
 
 const root = process.cwd();
 const moneyPlatformsDist = join(root, 'sites', 'money-platforms', 'dist');
+const moneyPlatformsBlogContent = join(root, 'sites', 'money-platforms', 'src', 'content', 'blog');
 
 function walk(dir) {
   const entries = readdirSync(dir, { withFileTypes: true });
@@ -41,6 +42,18 @@ function collectBuiltPaths(files) {
   }
 
   return existing;
+}
+
+function collectSourcePostSlugs() {
+  return readdirSync(moneyPlatformsBlogContent, { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .filter((entry) => /\.mdx?$/.test(entry.name))
+    .map((entry) => basename(entry.name).replace(/\.mdx?$/, ''));
+}
+
+function extractLocPaths(xml) {
+  return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
+    .map(([, loc]) => decodeURI(new URL(loc).pathname));
 }
 
 test('money-platforms built pages do not link to missing internal routes', () => {
@@ -87,21 +100,18 @@ test('money-platforms blog archive paginates rendered post cards', () => {
     'Run pnpm --filter @astro-money-farm/money-platforms build before this test'
   );
 
-  const blogDir = join(moneyPlatformsDist, 'blog');
-  const blogIndex = readFileSync(join(blogDir, 'index.html'), 'utf8');
-  const articlePageCount = readdirSync(blogDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .filter((entry) => !['category', 'tag', 'page'].includes(entry.name))
-    .length;
-  const renderedCardCount = blogIndex.match(/\bblog-card\b/g)?.length ?? 0;
+  const sourcePostCount = collectSourcePostSlugs().length;
+  const blogIndex = readFileSync(join(moneyPlatformsDist, 'blog', 'index.html'), 'utf8');
+  const renderedCardCount = blogIndex.match(/<article\b[^>]*\bclass=["'][^"']*\bblog-card\b[^"']*["'][^>]*>/g)?.length ?? 0;
 
   assert.ok(
-    articlePageCount > 24,
-    `Expected fixture to include more than 24 article pages, found ${articlePageCount}`
+    sourcePostCount > 24,
+    `Expected fixture to include more than 24 source posts, found ${sourcePostCount}`
   );
-  assert.ok(
-    renderedCardCount <= 24,
-    `Expected blog index to render at most 24 cards, found ${renderedCardCount}`
+  assert.equal(
+    renderedCardCount,
+    Math.min(24, sourcePostCount),
+    `Expected blog index to render the first page of source posts, found ${renderedCardCount}`
   );
   assert.match(blogIndex, /href=["']\/blog\/page\/2\/["']/);
 });
@@ -128,12 +138,41 @@ test('money-platforms emits split static sitemaps', () => {
   }
 
   for (const sitemapFile of ['sitemap-index.xml', 'sitemap.xml']) {
-    const source = readFileSync(join(moneyPlatformsDist, sitemapFile), 'utf8');
+    const locs = extractLocPaths(readFileSync(join(moneyPlatformsDist, sitemapFile), 'utf8'));
 
-    assert.match(source, /\/sitemap-pages\.xml/);
-    assert.match(source, /\/sitemap-posts-1\.xml/);
-    assert.match(source, /\/sitemap-archives-1\.xml/);
+    assert.ok(locs.includes('/sitemap-pages.xml'), `${sitemapFile} should reference sitemap-pages.xml`);
+    assert.ok(locs.includes('/sitemap-posts-1.xml'), `${sitemapFile} should reference sitemap-posts-1.xml`);
+    assert.ok(locs.includes('/sitemap-archives-1.xml'), `${sitemapFile} should reference sitemap-archives-1.xml`);
   }
+
+  const pageLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, 'sitemap-pages.xml'), 'utf8'));
+  for (const pagePath of ['/', '/blog/', '/about/', '/friends/', '/search/']) {
+    assert.ok(pageLocs.includes(pagePath), `sitemap-pages.xml should include ${pagePath}`);
+  }
+
+  const sourcePostPaths = collectSourcePostSlugs().map((slug) => `/blog/${slug}`);
+  const postLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, 'sitemap-posts-1.xml'), 'utf8'));
+  assert.ok(postLocs.length > 0, 'sitemap-posts-1.xml should contain post URLs');
+  assert.ok(postLocs.every((loc) => loc.startsWith('/blog/')), 'sitemap-posts-1.xml should only contain blog URLs');
+  assert.ok(
+    sourcePostPaths.some((postPath) => postLocs.includes(postPath)),
+    'sitemap-posts-1.xml should contain source post URLs'
+  );
+  assert.ok(
+    postLocs.every((loc) => !loc.startsWith('/blog/category/') && !loc.startsWith('/blog/tag/') && !loc.startsWith('/blog/page/')),
+    'sitemap-posts-1.xml should not contain archive URLs'
+  );
+  assert.ok(postLocs.length <= 500, 'sitemap-posts-1.xml should not exceed 500 URLs');
+
+  const archiveLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, 'sitemap-archives-1.xml'), 'utf8'));
+  assert.ok(archiveLocs.includes('/blog/'), 'sitemap-archives-1.xml should include /blog/');
+  assert.ok(archiveLocs.some((loc) => loc.startsWith('/blog/category/')), 'sitemap-archives-1.xml should include category URLs');
+  assert.ok(archiveLocs.some((loc) => loc.startsWith('/blog/tag/')), 'sitemap-archives-1.xml should include tag URLs');
+  assert.ok(
+    sourcePostPaths.every((postPath) => !archiveLocs.includes(postPath)),
+    'sitemap-archives-1.xml should not contain article slug URLs'
+  );
+  assert.ok(archiveLocs.length <= 500, 'sitemap-archives-1.xml should not exceed 500 URLs');
 });
 
 test('search page hydrates q query parameter on load', () => {
