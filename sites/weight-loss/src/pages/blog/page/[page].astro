@@ -1,0 +1,16 @@
+---
+import { BlogListPage, getBlogIndexStaticPaths } from '@astro-money-farm/core/pages';
+import siteConfig from '../../../config';
+
+export const getStaticPaths = getBlogIndexStaticPaths;
+
+const { posts, pagination, categories, visibleTags } = Astro.props;
+---
+
+<BlogListPage
+  config={siteConfig}
+  posts={posts}
+  pagination={pagination}
+  categories={categories}
+  visibleTags={visibleTags}
+/>

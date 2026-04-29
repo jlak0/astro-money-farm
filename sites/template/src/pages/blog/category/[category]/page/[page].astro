@@ -1,10 +1,10 @@
 ---
 import { BlogCategoryPage, getBlogCategoryStaticPaths } from '@astro-money-farm/core/pages';
-import siteConfig from '../../../config';
+import siteConfig from '../../../../../config';
 
 export const getStaticPaths = async () => {
   const paths = await getBlogCategoryStaticPaths();
-  return paths.filter((path) => !path.params.page);
+  return paths.filter((path) => path.params.page);
 };
 
 const { category, posts, pagination } = Astro.props;
