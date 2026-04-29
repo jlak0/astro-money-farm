@@ -122,27 +122,32 @@ test('money-platforms emits split static sitemaps', () => {
     'Run pnpm --filter @astro-money-farm/money-platforms build before this test'
   );
 
-  const sitemapFiles = [
-    'sitemap-index.xml',
-    'sitemap.xml',
-    'sitemap-pages.xml',
-    'sitemap-posts-1.xml',
-    'sitemap-archives-1.xml'
-  ];
-
-  for (const sitemapFile of sitemapFiles) {
+  for (const sitemapFile of ['sitemap-index.xml', 'sitemap.xml', 'sitemap-pages.xml']) {
     assert.ok(
       existsSync(join(moneyPlatformsDist, sitemapFile)),
       `Expected ${sitemapFile} to exist`
     );
   }
 
-  for (const sitemapFile of ['sitemap-index.xml', 'sitemap.xml']) {
-    const locs = extractLocPaths(readFileSync(join(moneyPlatformsDist, sitemapFile), 'utf8'));
+  const indexLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, 'sitemap-index.xml'), 'utf8'));
+  const compatibilityLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, 'sitemap.xml'), 'utf8'));
+  const postShardPaths = indexLocs.filter((loc) => /^\/sitemap-posts-\d+\.xml$/.test(loc));
+  const archiveShardPaths = indexLocs.filter((loc) => /^\/sitemap-archives-\d+\.xml$/.test(loc));
 
-    assert.ok(locs.includes('/sitemap-pages.xml'), `${sitemapFile} should reference sitemap-pages.xml`);
-    assert.ok(locs.includes('/sitemap-posts-1.xml'), `${sitemapFile} should reference sitemap-posts-1.xml`);
-    assert.ok(locs.includes('/sitemap-archives-1.xml'), `${sitemapFile} should reference sitemap-archives-1.xml`);
+  assert.deepEqual(
+    [...compatibilityLocs].sort(),
+    [...indexLocs].sort(),
+    'sitemap.xml should expose the same loc set as sitemap-index.xml'
+  );
+  assert.ok(indexLocs.includes('/sitemap-pages.xml'), 'sitemap-index.xml should reference sitemap-pages.xml');
+  assert.ok(postShardPaths.length > 0, 'sitemap-index.xml should reference at least one post sitemap shard');
+  assert.ok(archiveShardPaths.length > 0, 'sitemap-index.xml should reference at least one archive sitemap shard');
+
+  for (const sitemapPath of indexLocs) {
+    assert.ok(
+      existsSync(join(moneyPlatformsDist, basename(sitemapPath))),
+      `Expected referenced sitemap shard ${sitemapPath} to exist`
+    );
   }
 
   const pageLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, 'sitemap-pages.xml'), 'utf8'));
@@ -151,28 +156,51 @@ test('money-platforms emits split static sitemaps', () => {
   }
 
   const sourcePostPaths = collectSourcePostSlugs().map((slug) => `/blog/${slug}`);
-  const postLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, 'sitemap-posts-1.xml'), 'utf8'));
-  assert.ok(postLocs.length > 0, 'sitemap-posts-1.xml should contain post URLs');
-  assert.ok(postLocs.every((loc) => loc.startsWith('/blog/')), 'sitemap-posts-1.xml should only contain blog URLs');
-  assert.ok(
-    sourcePostPaths.some((postPath) => postLocs.includes(postPath)),
-    'sitemap-posts-1.xml should contain source post URLs'
-  );
-  assert.ok(
-    postLocs.every((loc) => !loc.startsWith('/blog/category/') && !loc.startsWith('/blog/tag/') && !loc.startsWith('/blog/page/')),
-    'sitemap-posts-1.xml should not contain archive URLs'
-  );
-  assert.ok(postLocs.length <= 500, 'sitemap-posts-1.xml should not exceed 500 URLs');
+  const sourcePostPathSet = new Set(sourcePostPaths);
+  const allPostLocs = [];
 
-  const archiveLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, 'sitemap-archives-1.xml'), 'utf8'));
-  assert.ok(archiveLocs.includes('/blog/'), 'sitemap-archives-1.xml should include /blog/');
-  assert.ok(archiveLocs.some((loc) => loc.startsWith('/blog/category/')), 'sitemap-archives-1.xml should include category URLs');
-  assert.ok(archiveLocs.some((loc) => loc.startsWith('/blog/tag/')), 'sitemap-archives-1.xml should include tag URLs');
-  assert.ok(
-    sourcePostPaths.every((postPath) => !archiveLocs.includes(postPath)),
-    'sitemap-archives-1.xml should not contain article slug URLs'
+  for (const postShardPath of postShardPaths) {
+    const postLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, basename(postShardPath)), 'utf8'));
+
+    assert.ok(postLocs.length > 0, `${postShardPath} should contain post URLs`);
+    assert.ok(postLocs.length <= 500, `${postShardPath} should not exceed 500 URLs`);
+    assert.ok(
+      postLocs.every((loc) => loc.startsWith('/blog/')),
+      `${postShardPath} should only contain blog URLs`
+    );
+    assert.ok(
+      postLocs.every((loc) => !loc.startsWith('/blog/category/') && !loc.startsWith('/blog/tag/') && !loc.startsWith('/blog/page/')),
+      `${postShardPath} should not contain archive URLs`
+    );
+    assert.ok(
+      postLocs.every((loc) => sourcePostPathSet.has(loc)),
+      `${postShardPath} should only contain source post URLs`
+    );
+
+    allPostLocs.push(...postLocs);
+  }
+
+  const allPostLocSet = new Set(allPostLocs);
+  assert.deepEqual(
+    sourcePostPaths.filter((postPath) => !allPostLocSet.has(postPath)),
+    [],
+    'Post sitemap shards should include every source post URL'
   );
-  assert.ok(archiveLocs.length <= 500, 'sitemap-archives-1.xml should not exceed 500 URLs');
+
+  for (const archiveShardPath of archiveShardPaths) {
+    const archiveLocs = extractLocPaths(readFileSync(join(moneyPlatformsDist, basename(archiveShardPath)), 'utf8'));
+
+    assert.ok(archiveLocs.length > 0, `${archiveShardPath} should contain archive URLs`);
+    assert.ok(archiveLocs.length <= 500, `${archiveShardPath} should not exceed 500 URLs`);
+    assert.ok(
+      archiveLocs.every((loc) => loc === '/blog/' || loc.startsWith('/blog/category/') || loc.startsWith('/blog/tag/') || loc.startsWith('/blog/page/')),
+      `${archiveShardPath} should only contain archive URLs`
+    );
+    assert.ok(
+      sourcePostPaths.every((postPath) => !archiveLocs.includes(postPath)),
+      `${archiveShardPath} should not contain article slug URLs`
+    );
+  }
 });
 
 test('search page hydrates q query parameter on load', () => {
