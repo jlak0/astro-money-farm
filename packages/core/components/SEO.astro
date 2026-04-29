@@ -46,7 +46,7 @@ const labels = {
 const t = labels[lang];
 const authorName = author || t.defaultAuthor;
 const siteUrl = getSiteUrl(config);
-const siteName = config.site?.name || '变现学堂';
+const siteName = config.site?.name || '站点';
 const siteDesc = config.site?.description || '';
 
 const fullOgImage = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;

@@ -3,7 +3,7 @@ import { BaseLayout } from '../components';
 
 const { config } = Astro.props;
 const lang = config.site?.lang === 'en-US' || config.language === 'en-US' ? 'en-US' : 'zh-CN';
-const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '变现学堂');
+const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '站点');
 
 const labels = {
   'zh-CN': {
@@ -155,11 +155,11 @@ const dateLocale = lang === 'zh-CN' ? 'zh-CN' : 'en-US';
     }
   }
 
-  input.addEventListener('input', () => {
+  function runSearch(query) {
     if (debounceTimer) clearTimeout(debounceTimer);
-    const query = input.value.trim();
+    const normalizedQuery = query.trim();
 
-    if (!query) {
+    if (!normalizedQuery) {
       results.innerHTML = '';
       emptyState.style.display = 'block';
       emptyState.querySelector('p').textContent = t.emptyHint;
@@ -169,7 +169,7 @@ const dateLocale = lang === 'zh-CN' ? 'zh-CN' : 'en-US';
 
     status.textContent = t.searching;
     debounceTimer = setTimeout(() => {
-      const render = () => renderResults(fuzzySearch(searchData, query), query);
+      const render = () => renderResults(fuzzySearch(searchData, normalizedQuery), normalizedQuery);
       if (searchData.length === 0) {
         status.textContent = t.dataLoading;
         loadSearchData().then(render);
@@ -177,6 +177,10 @@ const dateLocale = lang === 'zh-CN' ? 'zh-CN' : 'en-US';
         render();
       }
     }, 100);
+  }
+
+  input.addEventListener('input', () => {
+    runSearch(input.value);
   });
 
   function renderResults(searchResults, query) {
@@ -193,7 +197,13 @@ const dateLocale = lang === 'zh-CN' ? 'zh-CN' : 'en-US';
     results.innerHTML = searchResults.map(r => renderResult(r.item, query)).join('');
   }
 
-  loadSearchData();
+  const initialQuery = new URLSearchParams(window.location.search).get('q');
+  if (initialQuery) {
+    input.value = initialQuery;
+    runSearch(initialQuery);
+  } else {
+    loadSearchData();
+  }
 </script>
 
 <style is:global>

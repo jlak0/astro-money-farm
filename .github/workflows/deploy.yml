@@ -10,9 +10,102 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  build:
+  detect-changes:
     runs-on: ubuntu-latest
-    
+    outputs:
+      has_changes: ${{ steps.detect.outputs.has_changes }}
+      matrix: ${{ steps.detect.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed sites
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_SHA="${{ github.event.before }}"
+          fi
+
+          if [ -z "$BASE_SHA" ] || [[ "$BASE_SHA" =~ ^0+$ ]]; then
+            BASE_SHA="$(git rev-list --max-parents=0 HEAD)"
+          fi
+
+          git diff --name-only "$BASE_SHA" "$GITHUB_SHA" > changed-files.txt
+
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const files = fs.readFileSync('changed-files.txt', 'utf8')
+            .split('\n')
+            .map((line) => line.trim())
+            .filter(Boolean);
+
+          const siteConfigs = [
+            {
+              site: 'money-platforms',
+              package: '@astro-money-farm/money-platforms',
+              directory: 'sites/money-platforms/dist',
+              projectVar: 'CF_PAGES_PROJECT_MONEY_PLATFORMS',
+              defaultProject: 'money-platforms',
+              deploy: true
+            },
+            {
+              site: 'weight-loss',
+              package: '@astro-money-farm/site-weight-loss',
+              directory: 'sites/weight-loss/dist',
+              projectVar: 'CF_PAGES_PROJECT_WEIGHT_LOSS',
+              defaultProject: 'weight-loss',
+              deploy: true
+            },
+            {
+              site: 'template',
+              package: '@astro-money-farm/site-template',
+              directory: 'sites/template/dist',
+              projectVar: '',
+              defaultProject: '',
+              deploy: false
+            }
+          ];
+
+          const sharedPatterns = [
+            /^packages\/core\//,
+            /^package\.json$/,
+            /^pnpm-lock\.yaml$/,
+            /^pnpm-workspace\.yaml$/,
+            /^turbo\.json$/,
+            /^\.github\/workflows\/deploy\.yml$/
+          ];
+
+          const sharedChanged = files.some((file) => sharedPatterns.some((pattern) => pattern.test(file)));
+          const changedSites = siteConfigs.filter((config) => {
+            if (sharedChanged && config.deploy) return true;
+            return files.some((file) => file.startsWith(`sites/${config.site}/`));
+          });
+
+          const matrix = { include: changedSites };
+
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `has_changes=${changedSites.length > 0}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `matrix=${JSON.stringify(matrix)}\n`);
+
+          console.log('Changed files:');
+          for (const file of files) console.log(`- ${file}`);
+          console.log('Build matrix:', JSON.stringify(matrix));
+          NODE
+
+  build-and-deploy:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.detect-changes.outputs.matrix) }}
+
     steps:
       - uses: actions/checkout@v5
 
@@ -31,48 +124,22 @@ jobs:
           path: |
             .turbo
             sites/*/.astro
-          key: turbo-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: turbo-${{ runner.os }}-${{ matrix.site }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
+            turbo-${{ runner.os }}-${{ matrix.site }}-
             turbo-${{ runner.os }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build all sites
-        run: pnpm build
+      - name: Build ${{ matrix.site }}
+        run: pnpm --filter ${{ matrix.package }} build
 
-      - name: Upload build outputs - weight-loss
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-weight-loss
-          path: sites/weight-loss/dist
-
-  deploy-weight-loss:
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Download build
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-weight-loss
-          path: sites/weight-loss/dist
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy ${{ matrix.site }} to Cloudflare Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && matrix.deploy
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: weight-loss
-          directory: sites/weight-loss/dist
-
-  build-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+          projectName: ${{ vars[matrix.projectVar] || matrix.defaultProject }}
+          directory: ${{ matrix.directory }}

@@ -10,6 +10,8 @@
     "check:core-sharing": "node scripts/assert-core-sharing.mjs",
     "check:site-pages": "node scripts/assert-site-pages.mjs",
     "test:create-site": "node --test scripts/create-site.test.mjs",
+    "test:pagination-utils": "node --test scripts/pagination-utils.test.mjs",
+    "test:site-functionality": "node --test scripts/site-functionality.test.mjs",
     "clean": "turbo run clean",
     "deploy": "turbo run deploy",
     "deploy:cloudflare": "turbo run deploy-Cloudflare"

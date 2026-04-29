@@ -1,6 +1,8 @@
 ---
-import { BlogListPage } from '@astro-money-farm/core/pages';
+import { BlogListPage, getBlogIndexPageProps } from '@astro-money-farm/core/pages';
 import siteConfig from '../../config';
+
+const props = await getBlogIndexPageProps();
 ---
 
-<BlogListPage config={siteConfig} />
+<BlogListPage config={siteConfig} {...props} />

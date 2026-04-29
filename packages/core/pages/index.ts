@@ -8,6 +8,8 @@ export { default as HomePage } from './HomePage.astro';
 export { default as SearchPage } from './SearchPage.astro';
 export {
   getBlogCategoryStaticPaths,
+  getBlogIndexPageProps,
+  getBlogIndexStaticPaths,
   getBlogPostStaticPaths,
   getBlogTagStaticPaths
 } from './static-paths';

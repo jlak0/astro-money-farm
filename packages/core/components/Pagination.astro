@@ -1,0 +1,101 @@
+---
+import type { PaginationMeta } from '../utils';
+
+interface Props {
+  pagination?: PaginationMeta;
+  previousLabel?: string;
+  nextLabel?: string;
+  statusLabel?: string;
+  ariaLabel?: string;
+}
+
+const {
+  pagination,
+  previousLabel = '上一页',
+  nextLabel = '下一页',
+  statusLabel = '第 {current} / {total} 页',
+  ariaLabel = '分页导航'
+} = Astro.props;
+const currentPage = pagination?.currentPage.toString() ?? '';
+const totalPages = pagination?.totalPages.toString() ?? '';
+const renderedStatusLabel = statusLabel
+  .replace('{current}', currentPage)
+  .replace('{total}', totalPages);
+---
+
+{pagination && pagination.totalPages > 1 && (
+  <nav class="pagination" aria-label={ariaLabel}>
+    <a
+      class:list={['pagination-link', { disabled: !pagination.prevUrl }]}
+      href={pagination.prevUrl || undefined}
+      aria-disabled={!pagination.prevUrl}
+    >
+      {previousLabel}
+    </a>
+    <span class="pagination-status">
+      {renderedStatusLabel}
+    </span>
+    <a
+      class:list={['pagination-link', { disabled: !pagination.nextUrl }]}
+      href={pagination.nextUrl || undefined}
+      aria-disabled={!pagination.nextUrl}
+    >
+      {nextLabel}
+    </a>
+  </nav>
+)}
+
+<style>
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0 0;
+    color: var(--text-secondary);
+  }
+
+  .pagination-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .pagination-link:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+
+  .pagination-link.disabled {
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .pagination-status {
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .pagination {
+      gap: 0.75rem;
+    }
+
+    .pagination-link {
+      padding: 0.5rem 0.75rem;
+    }
+  }
+</style>

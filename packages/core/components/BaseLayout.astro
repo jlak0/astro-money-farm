@@ -3,6 +3,8 @@ import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import defaultConfig, { buildThemeCSS, getLang, type SiteConfig } from '../config';
+import { deriveCategoryLinks } from '../utils';
+import { getCollection } from 'astro:content';
 import '../styles/global.css';
 
 export interface Props {
@@ -30,6 +32,11 @@ const baiduAnalytics = config.analytics?.baidu;
 const umamiAnalytics = config.analytics?.umami?.enabled;
 const umamiUrl = config.analytics?.umami?.url;
 const umamiId = config.analytics?.umami?.id;
+const footerPosts = await getCollection('blog');
+const footerCategories = deriveCategoryLinks(footerPosts, config, {
+  entries: config.footer?.categories,
+  limit: 4
+});
 ---
 
 <!DOCTYPE html>
@@ -81,7 +88,7 @@ const umamiId = config.analytics?.umami?.id;
     <main>
       <slot />
     </main>
-    <Footer config={config} />
+    <Footer config={config} categories={footerCategories} />
 
     {googleAdsEnabled && (
       <script is:inline>

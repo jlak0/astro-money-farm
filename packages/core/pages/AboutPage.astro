@@ -3,60 +3,39 @@ import { BaseLayout, EmailSubscribe } from '../components';
 
 const { config } = Astro.props;
 const lang = config.site?.lang === 'en-US' || config.language === 'en-US' ? 'en-US' : 'zh-CN';
-const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '变现学堂');
+const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '站点');
 const contactEmail = config.social?.email || (lang === 'en-US' ? 'contact@example.com' : 'contact@example.com');
+const about = config.about || {};
 
 const labels = {
   'zh-CN': {
-    title: `关于站长 | ${siteName}`,
-    description: `了解${siteName}站长的背景和故事`,
-    pageTitle: '关于站长',
-    section1Title: '我是谁',
-    section1P1: `你好！我是${siteName}的站长，一个在互联网行业摸爬滚打8年的老兵。从最初的程序员，到现在的全栈独立开发者，我一直在探索用技术赚钱的方法。`,
-    section1P2: '现在我生活在法国，同时经营着自己的互联网业务。这个博客就是我分享赚钱经验、副业心得和海外创业故事的地方。',
-    section2Title: '这个博客',
-    section2Intro: `${siteName}成立于2022年，专注于分享：`,
-    section2Items: [
-      '<strong>AI变现</strong> - 如何用ChatGPT等AI工具实现副业增收',
-      '<strong>副业赚钱</strong> - 适合普通人的副业方向和实操方法',
-      '<strong>法国创业</strong> - 在法国创业、生活的第一手经验',
-      '<strong>干货分享</strong> - 效率工具、赚钱方法、思维提升'
-    ],
-    journeyTitle: '我的经历',
-    journey: [
-      ['2016', '国内互联网公司程序员'],
-      ['2019', '转行产品经理，开始探索副业'],
-      ['2021', '副业收入超过主业，开始独立创业'],
-      ['2022', `创办${siteName}，分享赚钱经验`],
-      ['2023', '移居法国，开始国际化业务探索']
+    title: `关于 | ${siteName}`,
+    description: `了解${siteName}`,
+    pageTitle: '关于',
+    sections: [
+      {
+        title: `关于${siteName}`,
+        paragraphs: [
+          config.site?.description || `${siteName} 会持续发布实用内容。`
+        ]
+      }
     ],
     contactTitle: '联系我',
-    contactIntro: '如果你有任何问题、合作建议，或者只是想交个朋友，可以联系我：',
+    contactIntro: '如果你有任何问题或合作建议，可以联系我：',
     emailLabel: 'Email：',
-    extraContacts: ['微信公众号：变现学堂', '知乎：变现学堂']
+    extraContacts: []
   },
   'en-US': {
     title: `About | ${siteName}`,
-    description: `Learn about the story behind ${siteName}`,
-    pageTitle: 'About Me',
-    section1Title: 'Who I Am',
-    section1P1: `Hi! I'm the founder of ${siteName}, a long-time internet builder focused on practical, useful content.`,
-    section1P2: `This blog is where I share research, guides, and lessons for readers who want clearer decisions and better results.`,
-    section2Title: 'This Blog',
-    section2Intro: `${siteName} focuses on sharing:`,
-    section2Items: [
-      '<strong>Practical guides</strong> - clear steps and useful context',
-      '<strong>Decision support</strong> - comparisons, trade-offs, and pitfalls',
-      '<strong>Expert research</strong> - topic-focused articles for repeat readers',
-      '<strong>Useful tips</strong> - actionable ideas you can apply quickly'
-    ],
-    journeyTitle: 'My Journey',
-    journey: [
-      ['2016', 'Started building products on the web'],
-      ['2019', 'Focused on content systems and audience growth'],
-      ['2021', 'Built independent projects and repeatable publishing workflows'],
-      ['2022', `Founded ${siteName}`],
-      ['2023', 'Expanded into international content and SEO']
+    description: `Learn about ${siteName}`,
+    pageTitle: 'About',
+    sections: [
+      {
+        title: `About ${siteName}`,
+        paragraphs: [
+          config.site?.description || `${siteName} publishes useful articles and resources.`
+        ]
+      }
     ],
     contactTitle: 'Contact Me',
     contactIntro: 'For questions or partnerships, contact me:',
@@ -66,50 +45,54 @@ const labels = {
 };
 
 const t = labels[lang];
+const title = about.title || t.title;
+const description = about.description || t.description;
+const pageTitle = about.pageTitle || t.pageTitle;
+const sections = about.sections?.length ? about.sections : t.sections;
+const contactTitle = about.contactTitle || t.contactTitle;
+const contactIntro = about.contactIntro || t.contactIntro;
+const emailLabel = about.emailLabel || t.emailLabel;
+const extraContacts = about.extraContacts || t.extraContacts;
 ---
 
-<BaseLayout config={config} title={t.title} description={t.description}>
+<BaseLayout config={config} title={title} description={description}>
   <div class="about-page">
     <header class="page-header">
       <div class="container">
-        <h1 class="page-title">{t.pageTitle}</h1>
+        <h1 class="page-title">{pageTitle}</h1>
       </div>
     </header>
 
     <div class="container">
       <div class="about-content">
-        <section class="about-section">
-          <h2>{t.section1Title}</h2>
-          <p set:html={t.section1P1} />
-          <p set:html={t.section1P2} />
-        </section>
-
-        <section class="about-section">
-          <h2>{t.section2Title}</h2>
-          <p>{t.section2Intro}</p>
-          <ul>
-            {t.section2Items.map(item => <li set:html={item} />)}
-          </ul>
-        </section>
-
-        <section class="about-section">
-          <h2>{t.journeyTitle}</h2>
-          <div class="timeline">
-            {t.journey.map(([year, text]) => (
-              <div class="timeline-item">
-                <span class="timeline-year">{year}</span>
-                <p>{text}</p>
+        {sections.map(section => (
+          <section class="about-section">
+            <h2>{section.title}</h2>
+            {section.paragraphs?.map(paragraph => <p set:html={paragraph} />)}
+            {section.items && (
+              <ul>
+                {section.items.map(item => <li set:html={item} />)}
+              </ul>
+            )}
+            {section.timeline && (
+              <div class="timeline">
+                {section.timeline.map(([year, text]) => (
+                  <div class="timeline-item">
+                    <span class="timeline-year">{year}</span>
+                    <p>{text}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            )}
+          </section>
+        ))}
 
         <section class="about-section">
-          <h2>{t.contactTitle}</h2>
-          <p>{t.contactIntro}</p>
+          <h2>{contactTitle}</h2>
+          <p>{contactIntro}</p>
           <ul class="contact-list">
-            <li>{t.emailLabel}{contactEmail}</li>
-            {t.extraContacts.map(item => <li>{item}</li>)}
+            <li>{emailLabel}{contactEmail}</li>
+            {extraContacts.map(item => <li>{item}</li>)}
           </ul>
         </section>
 

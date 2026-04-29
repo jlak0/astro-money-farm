@@ -1,12 +1,14 @@
 ---
 import defaultConfig, { getLang, type SiteConfig } from '../config';
+import type { CategoryLink } from '../utils';
 
 export interface Props {
   config?: SiteConfig;
+  categories?: CategoryLink[];
 }
 
-const { config = defaultConfig } = Astro.props;
-const { name, description } = config.site || { name: '变现学堂', description: '' };
+const { config = defaultConfig, categories = [] } = Astro.props;
+const { name, description } = config.site || { name: '站点', description: '' };
 const { copyright, ICP, police } = config.footer || {};
 const { email } = config.social || {};
 const lang = getLang(config);
@@ -22,13 +24,7 @@ const labels = {
     emailContact: 'Email联系',
     sitemap: '网站地图',
     icp: 'ICP备案',
-    police: '公安备案',
-    footerCategories: [
-      'AI变现',
-      '副业',
-      '干货',
-      '法国创业'
-    ]
+    police: '公安备案'
   },
   'en-US': {
     quickLinks: 'Quick Links',
@@ -40,13 +36,7 @@ const labels = {
     emailContact: 'Email',
     sitemap: 'Sitemap',
     icp: 'ICP',
-    police: 'Police',
-    footerCategories: [
-      'Intermittent Fasting',
-      'Keto Diet',
-      'Low Carb',
-      'Tips'
-    ]
+    police: 'Police'
   }
 };
 
@@ -78,14 +68,16 @@ const currentYear = new Date().getFullYear();
           </ul>
         </div>
 
-        <div class="footer-column">
-          <h4>{t.categories}</h4>
-          <ul>
-            {t.footerCategories.map(category => (
-              <li><a href={`/blog/category/${category}`}>{category}</a></li>
-            ))}
-          </ul>
-        </div>
+        {categories.length > 0 && (
+          <div class="footer-column">
+            <h4>{t.categories}</h4>
+            <ul>
+              {categories.map(category => (
+                <li><a href={`/blog/category/${category.slug}`}>{category.name}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div class="footer-column">
           <h4>{t.contact}</h4>

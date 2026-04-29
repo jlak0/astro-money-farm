@@ -2,9 +2,12 @@
 import { BlogTagPage, getBlogTagStaticPaths } from '@astro-money-farm/core/pages';
 import siteConfig from '../../../config';
 
-export const getStaticPaths = getBlogTagStaticPaths;
+export const getStaticPaths = async () => {
+  const paths = await getBlogTagStaticPaths();
+  return paths.filter((path) => !path.params.page);
+};
 
-const { tag, posts } = Astro.props;
+const { tag, posts, pagination } = Astro.props;
 ---
 
-<BlogTagPage config={siteConfig} tag={tag} posts={posts} />
+<BlogTagPage config={siteConfig} tag={tag} posts={posts} pagination={pagination} />
