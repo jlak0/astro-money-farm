@@ -26,6 +26,24 @@ test('paginateItems slices items and builds page metadata', () => {
   assert.equal(page.pagination.nextUrl, '/blog/page/3/');
 });
 
+test('paginateItems clamps invalid page sizes to one', () => {
+  const items = ['a', 'b', 'c'];
+
+  for (const pageSize of [0, -2, Number.POSITIVE_INFINITY, Number.NaN]) {
+    const page = paginateItems(items, {
+      currentPage: 2,
+      pageSize,
+      basePath: '/blog'
+    });
+
+    assert.deepEqual(page.items, ['b']);
+    assert.equal(page.pagination.pageSize, 1);
+    assert.equal(page.pagination.totalPages, 3);
+    assert.equal(page.pagination.prevUrl, '/blog/');
+    assert.equal(page.pagination.nextUrl, '/blog/page/3/');
+  }
+});
+
 test('buildPageUrl keeps page one canonical', () => {
   assert.equal(buildPageUrl('/blog', 1), '/blog/');
   assert.equal(buildPageUrl('/blog', 2), '/blog/page/2/');
@@ -58,6 +76,15 @@ test('shardItems splits lists by configured shard size', () => {
 
 test('shardItems returns a single empty shard for empty lists', () => {
   assert.deepEqual(shardItems([], 2), [{ page: 1, items: [] }]);
+});
+
+test('shardItems clamps invalid shard sizes to one', () => {
+  for (const shardSize of [0, -2, Number.POSITIVE_INFINITY, Number.NaN]) {
+    assert.deepEqual(shardItems(['a', 'b'], shardSize), [
+      { page: 1, items: ['a'] },
+      { page: 2, items: ['b'] }
+    ]);
+  }
 });
 
 test('default constants match approved scale design', () => {

@@ -45,6 +45,14 @@ export function normalizeBasePath(basePath: string) {
   return basePath.replace(/\/+$/, '') || '/';
 }
 
+function normalizePositiveSize(size: number) {
+  if (!Number.isFinite(size) || size <= 0) {
+    return 1;
+  }
+
+  return Math.max(1, Math.floor(size));
+}
+
 export function buildPageUrl(basePath: string, page: number) {
   const normalizedBasePath = normalizeBasePath(basePath);
   const prefix = normalizedBasePath === '/' ? '' : normalizedBasePath;
@@ -60,10 +68,11 @@ export function paginateItems<T>(
   items: T[],
   options: PaginationOptions
 ): PaginatedResult<T> {
+  const pageSize = normalizePositiveSize(options.pageSize);
   const totalItems = items.length;
-  const totalPages = Math.max(1, Math.ceil(totalItems / options.pageSize));
-  const start = (options.currentPage - 1) * options.pageSize;
-  const end = start + options.pageSize;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const start = (options.currentPage - 1) * pageSize;
+  const end = start + pageSize;
 
   return {
     items: items.slice(start, end),
@@ -71,7 +80,7 @@ export function paginateItems<T>(
       currentPage: options.currentPage,
       totalPages,
       totalItems,
-      pageSize: options.pageSize,
+      pageSize,
       basePath: options.basePath,
       prevUrl:
         options.currentPage > 1
@@ -105,17 +114,18 @@ export function countTags(posts: TaggedPost[], limit = DEFAULT_PAGINATION.visibl
     .map(([tag, count]): TagCount => ({ tag, count }));
 }
 
-export function shardItems<T>(items: T[], shardSize: number) {
+export function shardItems<T>(items: T[], shardSize: number): Shard<T>[] {
   if (items.length === 0) {
     return [{ page: 1, items: [] }];
   }
 
+  const size = normalizePositiveSize(shardSize);
   const shards: Shard<T>[] = [];
 
-  for (let index = 0; index < items.length; index += shardSize) {
+  for (let index = 0; index < items.length; index += size) {
     shards.push({
       page: shards.length + 1,
-      items: items.slice(index, index + shardSize)
+      items: items.slice(index, index + size)
     });
   }
 
