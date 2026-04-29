@@ -1,11 +1,20 @@
 ---
-import { AdBanner, BaseLayout, BlogCard } from '../components';
+import { AdBanner, BaseLayout, BlogCard, Pagination } from '../components';
+import type { PaginationMeta } from '../utils';
 
-const { config, tag, posts } = Astro.props;
+interface Props {
+  config: any;
+  tag: string;
+  posts: any[];
+  pagination?: PaginationMeta;
+}
+
+const { config, tag, posts, pagination } = Astro.props;
 const lang = config.site?.lang === 'en-US' || config.language === 'en-US' ? 'en-US' : 'zh-CN';
 const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '站点');
 const allArticles = lang === 'en-US' ? 'All Articles' : '全部文章';
 const articlesLabel = lang === 'en-US' ? ' articles' : '篇文章';
+const totalItems = pagination?.totalItems || posts.length;
 const description = lang === 'en-US'
   ? `Browse all articles tagged with #${tag} from ${siteName}.`
   : `浏览${siteName}中包含#${tag}标签的所有文章。`;
@@ -21,7 +30,7 @@ const description = lang === 'en-US'
           <span class="current">#{tag}</span>
         </nav>
         <h1 class="page-title">#{tag}</h1>
-        <p class="page-desc">{posts.length}{articlesLabel}</p>
+        <p class="page-desc">{totalItems}{articlesLabel}</p>
       </div>
     </header>
 
@@ -31,6 +40,7 @@ const description = lang === 'en-US'
         <div class="posts-grid">
           {posts.map(post => <BlogCard config={config} post={post} />)}
         </div>
+        <Pagination pagination={pagination} />
         <AdBanner config={config} position="inline" />
       </main>
     </div>

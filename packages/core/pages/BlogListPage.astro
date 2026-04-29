@@ -1,8 +1,32 @@
 ---
-import { AdBanner, BaseLayout, BlogCard } from '../components';
-import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { AdBanner, BaseLayout, BlogCard, Pagination } from '../components';
+import type { PaginationMeta, TagCount } from '../utils';
+import { getBlogIndexPageProps } from './static-paths';
 
-const { config } = Astro.props;
+interface Props {
+  config: any;
+  posts?: CollectionEntry<'blog'>[];
+  pagination?: PaginationMeta;
+  categories?: string[];
+  visibleTags?: TagCount[];
+}
+
+const {
+  config,
+  posts: providedPosts,
+  pagination: providedPagination,
+  categories: providedCategories,
+  visibleTags: providedVisibleTags
+} = Astro.props;
+const fallbackProps =
+  providedPosts === undefined && providedPagination === undefined
+    ? await getBlogIndexPageProps()
+    : undefined;
+const posts = providedPosts ?? fallbackProps?.posts ?? [];
+const pagination = providedPagination ?? fallbackProps?.pagination;
+const categories = providedCategories ?? fallbackProps?.categories ?? [];
+const visibleTags = providedVisibleTags ?? fallbackProps?.visibleTags ?? [];
 const lang = config.site?.lang === 'en-US' || config.language === 'en-US' ? 'en-US' : 'zh-CN';
 const siteName = config.site?.name || (lang === 'en-US' ? 'Site' : '站点');
 
@@ -24,13 +48,7 @@ const labels = {
 };
 
 const t = labels[lang];
-const allPosts = await getCollection('blog');
-const sortedPosts = allPosts.sort((a, b) =>
-  b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
-);
-
-const categories = [...new Set(allPosts.map(p => p.data.category))];
-const tags = [...new Set(allPosts.flatMap(p => p.data.tags || []))];
+const totalItems = pagination?.totalItems || posts.length;
 ---
 
 <BaseLayout config={config} title={`${t.title} | ${siteName}`} description={t.metaDesc}>
@@ -38,7 +56,7 @@ const tags = [...new Set(allPosts.flatMap(p => p.data.tags || []))];
     <header class="page-header">
       <div class="container">
         <h1 class="page-title">{t.title}</h1>
-        <p class="page-desc">{sortedPosts.length}{t.articles}</p>
+        <p class="page-desc">{totalItems}{t.articles}</p>
       </div>
     </header>
 
@@ -53,12 +71,12 @@ const tags = [...new Set(allPosts.flatMap(p => p.data.tags || []))];
           </div>
         </div>
 
-        {tags.length > 0 && (
+        {visibleTags.length > 0 && (
           <div class="filter-section">
             <h3 class="filter-title">{t.tags}</h3>
             <div class="filter-tags">
-              {tags.map(tag => (
-                <a href={`/blog/tag/${tag}`} class="filter-tag">#{tag}</a>
+              {visibleTags.map(({ tag, count }) => (
+                <a href={`/blog/tag/${tag}`} class="filter-tag">#{tag} ({count})</a>
               ))}
             </div>
           </div>
@@ -68,8 +86,9 @@ const tags = [...new Set(allPosts.flatMap(p => p.data.tags || []))];
       <main class="posts-section">
         <AdBanner config={config} position="top" />
         <div class="posts-grid">
-          {sortedPosts.map(post => <BlogCard config={config} post={post} />)}
+          {posts.map(post => <BlogCard config={config} post={post} />)}
         </div>
+        <Pagination pagination={pagination} />
         <AdBanner config={config} position="inline" />
       </main>
     </div>

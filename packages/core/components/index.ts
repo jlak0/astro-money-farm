@@ -13,3 +13,4 @@ export { default as FriendLinks } from './FriendLinks.astro';
 export { default as EmailSubscribe } from './EmailSubscribe.astro';
 export { default as BaseLayout } from './BaseLayout.astro';
 export { default as BlogPostLayout } from './BlogPostLayout.astro';
+export { default as Pagination } from './Pagination.astro';
