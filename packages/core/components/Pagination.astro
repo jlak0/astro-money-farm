@@ -3,29 +3,44 @@ import type { PaginationMeta } from '../utils';
 
 interface Props {
   pagination?: PaginationMeta;
+  previousLabel?: string;
+  nextLabel?: string;
+  statusLabel?: string;
+  ariaLabel?: string;
 }
 
-const { pagination } = Astro.props;
+const {
+  pagination,
+  previousLabel = '上一页',
+  nextLabel = '下一页',
+  statusLabel = '第 {current} / {total} 页',
+  ariaLabel = '分页导航'
+} = Astro.props;
+const currentPage = pagination?.currentPage.toString() ?? '';
+const totalPages = pagination?.totalPages.toString() ?? '';
+const renderedStatusLabel = statusLabel
+  .replace('{current}', currentPage)
+  .replace('{total}', totalPages);
 ---
 
 {pagination && pagination.totalPages > 1 && (
-  <nav class="pagination" aria-label="分页导航">
+  <nav class="pagination" aria-label={ariaLabel}>
     <a
       class:list={['pagination-link', { disabled: !pagination.prevUrl }]}
       href={pagination.prevUrl || undefined}
       aria-disabled={!pagination.prevUrl}
     >
-      上一页
+      {previousLabel}
     </a>
     <span class="pagination-status">
-      第 {pagination.currentPage} / {pagination.totalPages} 页
+      {renderedStatusLabel}
     </span>
     <a
       class:list={['pagination-link', { disabled: !pagination.nextUrl }]}
       href={pagination.nextUrl || undefined}
       aria-disabled={!pagination.nextUrl}
     >
-      下一页
+      {nextLabel}
     </a>
   </nav>
 )}

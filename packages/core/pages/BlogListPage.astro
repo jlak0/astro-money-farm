@@ -38,14 +38,22 @@ const labels = {
     metaDesc: `浏览${siteName}的所有文章。`,
     articles: '篇精选文章',
     categories: '分类',
-    tags: '标签'
+    tags: '标签',
+    paginationPrevious: '上一页',
+    paginationNext: '下一页',
+    paginationStatus: '第 {current} / {total} 页',
+    paginationAria: '分页导航'
   },
   'en-US': {
     title: 'All Articles',
     metaDesc: `Browse all articles from ${siteName}.`,
     articles: ' articles',
     categories: 'Categories',
-    tags: 'Tags'
+    tags: 'Tags',
+    paginationPrevious: 'Previous',
+    paginationNext: 'Next',
+    paginationStatus: 'Page {current} of {total}',
+    paginationAria: 'Pagination'
   }
 };
 
@@ -90,7 +98,13 @@ const totalItems = pagination?.totalItems || posts.length;
         <div class="posts-grid">
           {posts.map(post => <BlogCard config={config} post={post} />)}
         </div>
-        <Pagination pagination={pagination} />
+        <Pagination
+          pagination={pagination}
+          previousLabel={t.paginationPrevious}
+          nextLabel={t.paginationNext}
+          statusLabel={t.paginationStatus}
+          ariaLabel={t.paginationAria}
+        />
         <AdBanner config={config} position="inline" />
       </main>
     </div>
